@@ -15,9 +15,12 @@ export function AboutSection({ onOpenInquiry, isArabic = true }: AboutSectionPro
           <div className="lg:col-span-6 relative">
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-xl border border-neutral-200 aspect-[4/3] bg-neutral-100">
               <img
-                src="/images/estate_interior.jpg"
+                src="/images/about_home.jpeg"
                 alt="أملاك - معروضات متميزة"
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://www.homes-jordan.com/uploads/services/67ddc056-d058-4401-bf72-61593fc10145-20230225071248.jpeg';
+                }}
               />
             </div>
           </div>
