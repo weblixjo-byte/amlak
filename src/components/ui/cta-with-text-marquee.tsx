@@ -34,7 +34,7 @@ function VerticalMarquee({
     <div
       ref={containerRef}
       className={cn(
-        "group flex flex-col overflow-hidden",
+        "group flex flex-col overflow-hidden bg-transparent",
         className
       )}
       style={
@@ -45,7 +45,7 @@ function VerticalMarquee({
     >
       <div
         className={cn(
-          "flex shrink-0 flex-col animate-marquee-vertical",
+          "flex shrink-0 flex-col animate-marquee-vertical bg-transparent",
           reverse && "[animation-direction:reverse]",
           pauseOnHover && "group-hover:[animation-play-state:paused]"
         )}
@@ -54,7 +54,7 @@ function VerticalMarquee({
       </div>
       <div
         className={cn(
-          "flex shrink-0 flex-col animate-marquee-vertical",
+          "flex shrink-0 flex-col animate-marquee-vertical bg-transparent",
           reverse && "[animation-direction:reverse]",
           pauseOnHover && "group-hover:[animation-play-state:paused]"
         )}
@@ -112,7 +112,7 @@ export function CTAWithVerticalMarquee({
         const distance = Math.abs(centerY - itemCenterY);
         const maxDistance = containerRect.height / 2;
         const normalizedDistance = Math.min(distance / maxDistance, 1);
-        const opacity = 1 - normalizedDistance * 0.75;
+        const opacity = Math.max(0.15, 1 - Math.pow(normalizedDistance, 1.5) * 0.85);
         (item as HTMLElement).style.opacity = opacity.toString();
       });
     };
@@ -128,9 +128,9 @@ export function CTAWithVerticalMarquee({
   }, []);
 
   return (
-    <section className="w-full bg-[#FAFAFA] text-neutral-900 py-24 px-6 md:px-12 overflow-hidden font-ibm border-t border-neutral-200 relative">
+    <section className="w-full bg-white text-black py-24 px-6 md:px-12 overflow-hidden font-ibm border-t border-neutral-200 relative">
       
-      {/* Background Decorative Soft Glow */}
+      {/* Subtle Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1E3A8A]/5 rounded-full blur-[140px] pointer-events-none"></div>
 
       <div className="max-w-[1440px] mx-auto relative z-10 animate-fade-in-up">
@@ -143,11 +143,12 @@ export function CTAWithVerticalMarquee({
               <span>{isArabic ? "تواصل مباشر وحجز معاينة" : "DIRECT VIEWING & INQUIRY"}</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-neutral-900 font-ibm">
+            {/* Headline matching Hero font family & weight with thick emerald marker underline */}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-black font-ibm">
               {isArabic ? (
                 <>
                   اختر عقارك أو سيارتك القادمة واطلب{' '}
-                  <span className="relative inline-block pb-1 text-[#1E3A8A] after:absolute after:bottom-0 after:right-0 after:w-full after:h-[4px] after:bg-[#0D5C3A] after:rounded-full">
+                  <span className="relative inline-block pb-1 text-[#1E3A8A] font-bold after:absolute after:-bottom-1.5 after:right-0 after:w-full after:h-[6px] md:after:h-[8px] after:bg-[#0D5C3A] after:rounded-full">
                     معاينة فورية
                   </span>
                   .
@@ -155,7 +156,7 @@ export function CTAWithVerticalMarquee({
               ) : (
                 <>
                   Find your next asset and request an{' '}
-                  <span className="relative inline-block pb-1 text-[#1E3A8A] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] after:bg-[#0D5C3A] after:rounded-full">
+                  <span className="relative inline-block pb-1 text-[#1E3A8A] font-bold after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-[6px] md:after:h-[8px] after:bg-[#0D5C3A] after:rounded-full">
                     instant viewing
                   </span>
                   .
@@ -169,7 +170,7 @@ export function CTAWithVerticalMarquee({
                 : "The Amlak team is ready to schedule your direct on-site viewings for premium properties and luxury cars across Amman."}
             </p>
 
-            {/* Action Buttons using InteractiveHoverButton */}
+            {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <InteractiveHoverButton
                 onClick={() => onOpenInquiry && onOpenInquiry("استفسار ومعاينة مباشرة")}
@@ -192,25 +193,25 @@ export function CTAWithVerticalMarquee({
 
           </div>
 
-          {/* Right Marquee Column */}
-          <div ref={marqueeRef} className="relative h-[450px] md:h-[550px] flex items-center justify-center animate-fade-in-up">
-            <div className="relative w-full h-full">
-              <VerticalMarquee speed={22} className="h-full">
+          {/* Right Marquee Column - NO WHITE CARD BACKDROP, Pure Solid Pitch-Black Text */}
+          <div ref={marqueeRef} className="relative h-[450px] md:h-[550px] flex items-center justify-center animate-fade-in-up bg-transparent">
+            <div className="relative w-full h-full bg-transparent">
+              <VerticalMarquee speed={22} className="h-full bg-transparent">
                 {marqueeItems.map((item, idx) => (
                   <div
                     key={idx}
-                    className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight py-6 text-center text-neutral-900 font-ibm marquee-item transition-opacity duration-300"
+                    className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight py-6 text-center text-black font-ibm marquee-item transition-opacity duration-300"
                   >
                     {item}
                   </div>
                 ))}
               </VerticalMarquee>
               
-              {/* Top vignette white gradient overlay */}
-              <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/80 to-transparent z-10"></div>
+              {/* Top vignette gradient overlay matching section white background */}
+              <div className="pointer-events-none absolute top-0 left-0 right-0 h-36 bg-gradient-to-b from-white via-white/80 to-transparent z-10"></div>
               
-              {/* Bottom vignette white gradient overlay */}
-              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/80 to-transparent z-10"></div>
+              {/* Bottom vignette gradient overlay matching section white background */}
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
             </div>
           </div>
 
