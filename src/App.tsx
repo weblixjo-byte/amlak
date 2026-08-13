@@ -9,6 +9,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 import { InquiryModal } from './components/InquiryModal';
 import { PropertyItem, Brand } from './types';
+import { api } from './lib/api';
 
 const SECRET_HASH = '#amlak-admin-secret-8877';
 const ADMIN_PASSWORD = 'amlak2026';
@@ -32,39 +33,23 @@ export const App: React.FC = () => {
   const [inputPassword, setInputPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  // ── Shared State (Starts 100% EMPTY as requested by user) ──────────────────
-  const [properties, setPropertiesRaw] = useState<PropertyItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('amlak_properties');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  // ── Shared Cloud/Local State ──────────────────────────────────────────────
+  const [properties, setPropertiesRaw] = useState<PropertyItem[]>([]);
+  const [cars, setCarsRaw] = useState<PropertyItem[]>([]);
+  const [brands, setBrandsRaw] = useState<Brand[]>([]);
 
-  const [cars, setCarsRaw] = useState<PropertyItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('amlak_cars');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  // Initial Load from Cloud API / Local
+  useEffect(() => {
+    api.getProperties().then((data) => setPropertiesRaw(data));
+    api.getCars().then((data) => setCarsRaw(data));
+    api.getBrands().then((data) => setBrandsRaw(data));
+  }, []);
 
-  const [brands, setBrandsRaw] = useState<Brand[]>(() => {
-    try {
-      const saved = localStorage.getItem('amlak_brands');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // State setters that immediately persist to localStorage
+  // State setters that also post to API + sync localStorage
   const setProperties: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setPropertiesRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_properties', JSON.stringify(next)); } catch (e) { console.error(e); }
+      try { localStorage.setItem('amlak_properties', JSON.stringify(next)); } catch (e) {}
       return next;
     });
   };
@@ -72,7 +57,7 @@ export const App: React.FC = () => {
   const setCars: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setCarsRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_cars', JSON.stringify(next)); } catch (e) { console.error(e); }
+      try { localStorage.setItem('amlak_cars', JSON.stringify(next)); } catch (e) {}
       return next;
     });
   };
@@ -80,7 +65,7 @@ export const App: React.FC = () => {
   const setBrands: React.Dispatch<React.SetStateAction<Brand[]>> = (val) => {
     setBrandsRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_brands', JSON.stringify(next)); } catch (e) { console.error(e); }
+      try { localStorage.setItem('amlak_brands', JSON.stringify(next)); } catch (e) {}
       return next;
     });
   };
