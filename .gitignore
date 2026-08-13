@@ -4,8 +4,8 @@ node_modules/
 # Build output
 dist/
 
-# Large media files (too big for GitHub - host separately)
-public/videos/
+# Large uncompressed raw video (100MB+)
+public/videos/1.mp4
 
 # Environment files
 .env
