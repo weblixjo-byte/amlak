@@ -20,7 +20,7 @@ export const App: React.FC = () => {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
-  // ── Persistent Admin Password Auth (Saved in localStorage so it NEVER prompts repeatedly) ──
+  // ── Persistent Admin Authentication ─────────────────────────────────────
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
     try {
       return localStorage.getItem('amlak_admin_authenticated') === 'true';
@@ -33,23 +33,16 @@ export const App: React.FC = () => {
   const [inputPassword, setInputPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  // ── Shared Cloud/Local State ──────────────────────────────────────────────
-  const [properties, setPropertiesRaw] = useState<PropertyItem[]>([]);
-  const [cars, setCarsRaw] = useState<PropertyItem[]>([]);
-  const [brands, setBrandsRaw] = useState<Brand[]>([]);
+  // ── Shared State (Starts 100% CLEAN & SPOTLESS) ──────────────────────────
+  const [properties, setPropertiesRaw] = useState<PropertyItem[]>(() => api.getProperties());
+  const [cars, setCarsRaw] = useState<PropertyItem[]>(() => api.getCars());
+  const [brands, setBrandsRaw] = useState<Brand[]>(() => api.getBrands());
 
-  // Initial Load from Cloud API / Local
-  useEffect(() => {
-    api.getProperties().then((data) => setPropertiesRaw(data));
-    api.getCars().then((data) => setCarsRaw(data));
-    api.getBrands().then((data) => setBrandsRaw(data));
-  }, []);
-
-  // State setters that also post to API + sync localStorage
+  // Setters that persist to local storage + API sync
   const setProperties: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setPropertiesRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_properties', JSON.stringify(next)); } catch (e) {}
+      api.saveProperties(next);
       return next;
     });
   };
@@ -57,7 +50,7 @@ export const App: React.FC = () => {
   const setCars: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setCarsRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_cars', JSON.stringify(next)); } catch (e) {}
+      api.saveCars(next);
       return next;
     });
   };
@@ -65,12 +58,12 @@ export const App: React.FC = () => {
   const setBrands: React.Dispatch<React.SetStateAction<Brand[]>> = (val) => {
     setBrandsRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
-      try { localStorage.setItem('amlak_brands', JSON.stringify(next)); } catch (e) {}
+      api.saveBrands(next);
       return next;
     });
   };
 
-  // Sync across windows/tabs
+  // Sync across tabs/windows
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
       if (e.key === 'amlak_properties') {

@@ -1,21 +1,20 @@
 import { PropertyItem, Brand } from '../types';
 
-// API Service Layer connecting Cloudflare Pages Functions + MongoDB Atlas
 const API_BASE = '/api';
+
+export interface Inquiry {
+  id: string;
+  name: string;
+  phone: string;
+  item: string;
+  date: string;
+  status: string;
+  type: string;
+}
 
 export const api = {
   // ── PROPERTIES ────────────────────────────────────────────────────────────
-  async getProperties(): Promise<PropertyItem[]> {
-    try {
-      const res = await fetch(`${API_BASE}/properties`);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API fetch properties fallback:', e);
-    }
-    // Fallback to local storage
+  getProperties(): PropertyItem[] {
     try {
       const local = localStorage.getItem('amlak_properties');
       return local ? JSON.parse(local) : [];
@@ -24,49 +23,23 @@ export const api = {
     }
   },
 
-  async addProperty(item: PropertyItem): Promise<PropertyItem[]> {
+  saveProperties(items: PropertyItem[]): PropertyItem[] {
     try {
-      const res = await fetch(`${API_BASE}/properties`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API add property fallback:', e);
-    }
-    return [];
-  },
+      localStorage.setItem('amlak_properties', JSON.stringify(items));
+    } catch (e) {}
 
-  async deleteProperty(id: string): Promise<PropertyItem[]> {
-    try {
-      const res = await fetch(`${API_BASE}/properties?id=${encodeURIComponent(id)}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API delete property fallback:', e);
-    }
-    return [];
+    // Async sync to server API
+    fetch(`${API_BASE}/properties`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items),
+    }).catch(() => {});
+
+    return items;
   },
 
   // ── CARS ──────────────────────────────────────────────────────────────────
-  async getCars(): Promise<PropertyItem[]> {
-    try {
-      const res = await fetch(`${API_BASE}/cars`);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API fetch cars fallback:', e);
-    }
+  getCars(): PropertyItem[] {
     try {
       const local = localStorage.getItem('amlak_cars');
       return local ? JSON.parse(local) : [];
@@ -75,49 +48,22 @@ export const api = {
     }
   },
 
-  async addCar(item: PropertyItem): Promise<PropertyItem[]> {
+  saveCars(items: PropertyItem[]): PropertyItem[] {
     try {
-      const res = await fetch(`${API_BASE}/cars`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API add car fallback:', e);
-    }
-    return [];
-  },
+      localStorage.setItem('amlak_cars', JSON.stringify(items));
+    } catch (e) {}
 
-  async deleteCar(id: string): Promise<PropertyItem[]> {
-    try {
-      const res = await fetch(`${API_BASE}/cars?id=${encodeURIComponent(id)}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API delete car fallback:', e);
-    }
-    return [];
+    fetch(`${API_BASE}/cars`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items),
+    }).catch(() => {});
+
+    return items;
   },
 
   // ── BRANDS ────────────────────────────────────────────────────────────────
-  async getBrands(): Promise<Brand[]> {
-    try {
-      const res = await fetch(`${API_BASE}/brands`);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API fetch brands fallback:', e);
-    }
+  getBrands(): Brand[] {
     try {
       const local = localStorage.getItem('amlak_brands');
       return local ? JSON.parse(local) : [];
@@ -126,35 +72,41 @@ export const api = {
     }
   },
 
-  async addBrand(brand: Brand): Promise<Brand[]> {
+  saveBrands(items: Brand[]): Brand[] {
     try {
-      const res = await fetch(`${API_BASE}/brands`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(brand),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API add brand fallback:', e);
-    }
-    return [];
+      localStorage.setItem('amlak_brands', JSON.stringify(items));
+    } catch (e) {}
+
+    fetch(`${API_BASE}/brands`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items),
+    }).catch(() => {});
+
+    return items;
   },
 
-  async deleteBrand(id: string): Promise<Brand[]> {
+  // ── INQUIRIES ─────────────────────────────────────────────────────────────
+  getInquiries(): Inquiry[] {
     try {
-      const res = await fetch(`${API_BASE}/brands?id=${encodeURIComponent(id)}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) return data;
-      }
-    } catch (e) {
-      console.warn('API delete brand fallback:', e);
+      const local = localStorage.getItem('amlak_inquiries');
+      return local ? JSON.parse(local) : [];
+    } catch {
+      return [];
     }
-    return [];
+  },
+
+  saveInquiries(items: Inquiry[]): Inquiry[] {
+    try {
+      localStorage.setItem('amlak_inquiries', JSON.stringify(items));
+    } catch (e) {}
+
+    fetch(`${API_BASE}/inquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(items),
+    }).catch(() => {});
+
+    return items;
   },
 };

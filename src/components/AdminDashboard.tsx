@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PropertyItem, Brand } from '../types';
+import { api, Inquiry } from '../lib/api';
 
 interface AdminDashboardProps {
   isArabic: boolean;
@@ -43,9 +44,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'cars' | 'brands' | 'inquiries'>('overview');
 
-  const [inquiries, setInquiries] = useState([
-    { id: 'inq-101', name: 'أحمد المجالي', phone: '+962 7 9123 4567', item: 'طلب استفسار عام', date: '2026-08-12', status: 'جديد', type: 'استفسار' },
-  ]);
+  // Start 100% CLEAN & SPOTLESS for inquiries too
+  const [inquiries, setInquiriesRaw] = useState<Inquiry[]>(() => api.getInquiries());
+
+  const setInquiries = (items: Inquiry[]) => {
+    setInquiriesRaw(items);
+    api.saveInquiries(items);
+  };
 
   const totalAssetValueNum = useMemo(() => {
     const parsePrice = (priceStr: string): number => {
@@ -69,7 +74,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const handleCreateListing = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Fallback image if user leaves imageUrl empty or broken
     const fallbackImg = addCategory === 'estate' ? '/images/dabouq_villa.jpg' : '/images/hero_car.jpg';
 
     const newItem: PropertyItem = {
@@ -172,12 +176,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
 
-            {/* Logout button so admin doesn't get prompted repeatedly */}
+            {/* Logout button */}
             {onLogout && (
               <button
                 onClick={onLogout}
                 className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-1.5 transition-colors"
-                title={isArabic ? 'تسجيل الخروج من اللوحة' : 'Logout'}
+                title={isArabic ? 'تسجيل الخروج' : 'Logout'}
               >
                 <span className="material-symbols-outlined text-[18px]">logout</span>
                 <span>{isArabic ? 'خروج' : 'Logout'}</span>
@@ -515,34 +519,46 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <p className="text-xs text-neutral-500 mt-1">{isArabic ? 'متابعة وتحديث حالة الطلبات' : 'Manage incoming contact forms'}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {inquiries.map((inq) => (
-                <div key={inq.id} className="bg-white border border-neutral-200 p-6 rounded-2xl flex flex-col justify-between gap-4 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
-                    <span className="font-mono text-xs font-bold text-[#1E3A8A]">{inq.id}</span>
-                    <span className="px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">{inq.status}</span>
+            {inquiries.length === 0 ? (
+              <div className="bg-white border border-dashed border-neutral-300 rounded-2xl p-12 text-center">
+                <span className="material-symbols-outlined text-[48px] text-neutral-300 mb-3 block">mark_email_read</span>
+                <p className="text-neutral-600 font-bold text-sm mb-1">
+                  {isArabic ? 'لا توجد طلبات عملاء حالياً' : 'No inquiries yet'}
+                </p>
+                <p className="text-neutral-400 text-xs">
+                  {isArabic ? 'الطلبات المقدمة من نموذج الاستفسار تظهر هنا' : 'Incoming forms appear here'}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {inquiries.map((inq) => (
+                  <div key={inq.id} className="bg-white border border-neutral-200 p-6 rounded-2xl flex flex-col justify-between gap-4 shadow-sm">
+                    <div className="flex items-center justify-between border-b border-neutral-100 pb-3">
+                      <span className="font-mono text-xs font-bold text-[#1E3A8A]">{inq.id}</span>
+                      <span className="px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold">{inq.status}</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs text-neutral-500">{isArabic ? 'العميل:' : 'Client:'}</span>
+                      <h4 className="text-base font-bold text-neutral-900">{inq.name}</h4>
+                      <span className="text-xs font-mono text-neutral-600">{inq.phone}</span>
+                    </div>
+                    <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200 flex flex-col gap-1 text-xs">
+                      <span className="text-neutral-500 font-bold">{isArabic ? 'الموضوع:' : 'Requested:'}</span>
+                      <span className="text-neutral-800 font-bold">{inq.item}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleStatusChange(inq.id, 'تم التواصل')}
+                        className="flex-grow py-2.5 rounded-xl bg-[#1E3A8A] hover:bg-[#16316e] text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                        <span>{isArabic ? 'تم التواصل' : 'Mark Contacted'}</span>
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs text-neutral-500">{isArabic ? 'العميل:' : 'Client:'}</span>
-                    <h4 className="text-base font-bold text-neutral-900">{inq.name}</h4>
-                    <span className="text-xs font-mono text-neutral-600">{inq.phone}</span>
-                  </div>
-                  <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200 flex flex-col gap-1 text-xs">
-                    <span className="text-neutral-500 font-bold">{isArabic ? 'الموضوع:' : 'Requested:'}</span>
-                    <span className="text-neutral-800 font-bold">{inq.item}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleStatusChange(inq.id, 'تم التواصل')}
-                      className="flex-grow py-2.5 rounded-xl bg-[#1E3A8A] hover:bg-[#16316e] text-white font-bold text-xs flex items-center justify-center gap-1 shadow-sm transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-[16px]">check_circle</span>
-                      <span>{isArabic ? 'تم التواصل' : 'Mark Contacted'}</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
