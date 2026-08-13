@@ -79,13 +79,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
             />
 
             <InteractiveHoverButton
+              variant="dark"
               onClick={() => {
                 const el = document.getElementById('portfolio');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
               text={isArabic ? 'استعرض العروض' : 'Browse Listings'}
               isArabic={isArabic}
-              className="bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border-white/30 px-8 py-4 text-base"
+              className="bg-[#18181B] hover:bg-[#09090B] text-white border-neutral-700 px-8 py-4 text-base shadow-lg"
             />
           </div>
 
