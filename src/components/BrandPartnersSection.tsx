@@ -37,8 +37,8 @@ const distributeItems = (items: Brand[], columnCount: number): Brand[][] => {
 
 const BrandColumn: React.FC<{ brands: Brand[]; index: number; currentTime: number }> = React.memo(
   ({ brands, index, currentTime }) => {
-    const cycleInterval = 2200;
-    const columnDelay = index * 250;
+    const cycleInterval = 2400;
+    const columnDelay = index * 280;
     const adjustedTime = (currentTime + columnDelay) % (cycleInterval * Math.max(1, brands.length));
     const currentIndex = Math.floor(adjustedTime / cycleInterval) % Math.max(1, brands.length);
     const currentBrand = brands[currentIndex];
@@ -47,7 +47,7 @@ const BrandColumn: React.FC<{ brands: Brand[]; index: number; currentTime: numbe
 
     return (
       <motion.div
-        className="relative h-16 w-36 md:h-20 md:w-60 overflow-hidden flex items-center justify-center bg-transparent"
+        className="relative h-20 w-44 md:h-24 md:w-64 overflow-hidden flex items-center justify-center bg-transparent"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1, duration: 0.5, ease: 'easeOut' }}
@@ -56,32 +56,33 @@ const BrandColumn: React.FC<{ brands: Brand[]; index: number; currentTime: numbe
           <motion.div
             key={`${currentBrand.id}-${currentIndex}`}
             className="absolute inset-0 flex items-center justify-center p-2"
-            initial={{ y: '20%', opacity: 0, filter: 'blur(4px)' }}
+            initial={{ y: '25%', opacity: 0, filter: 'blur(6px)' }}
             animate={{
               y: '0%',
               opacity: 1,
               filter: 'blur(0px)',
               transition: {
                 type: 'spring',
-                stiffness: 300,
-                damping: 22,
-                bounce: 0.2,
-                duration: 0.5,
+                stiffness: 280,
+                damping: 24,
+                bounce: 0.15,
+                duration: 0.6,
               },
             }}
             exit={{
-              y: '-20%',
+              y: '-25%',
               opacity: 0,
-              filter: 'blur(4px)',
-              transition: { type: 'tween', ease: 'easeIn', duration: 0.3 },
+              filter: 'blur(6px)',
+              transition: { type: 'tween', ease: 'easeIn', duration: 0.35 },
             }}
           >
-            <div className="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-white border border-neutral-200 shadow-sm hover:border-[#1E3A8A] transition-all cursor-default h-14 min-w-[140px] text-center">
+            {/* Clean Transparent Backdrop - Bigger Logos */}
+            <div className="inline-flex items-center justify-center p-2 rounded-2xl bg-transparent transition-all cursor-default h-full w-full text-center">
               {currentBrand.imageUrl ? (
                 <img
                   src={currentBrand.imageUrl}
                   alt={currentBrand.name}
-                  className="h-8 max-w-[130px] object-contain"
+                  className="h-12 md:h-16 max-w-[180px] md:max-w-[230px] object-contain drop-shadow-sm filter grayscale hover:grayscale-0 transition-all duration-300"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
@@ -90,7 +91,7 @@ const BrandColumn: React.FC<{ brands: Brand[]; index: number; currentTime: numbe
                       let span = parent.querySelector('span');
                       if (!span) {
                         span = document.createElement('span');
-                        span.className = 'text-sm font-bold text-neutral-800 font-ibm';
+                        span.className = 'text-base md:text-xl font-bold text-neutral-900 font-ibm tracking-wide';
                         span.innerText = currentBrand.name;
                         parent.appendChild(span);
                       }
@@ -99,7 +100,7 @@ const BrandColumn: React.FC<{ brands: Brand[]; index: number; currentTime: numbe
                   }}
                 />
               ) : (
-                <span className="text-sm font-bold text-neutral-800 font-ibm tracking-wide">
+                <span className="text-base md:text-xl font-bold text-neutral-900 font-ibm tracking-wide hover:text-[#1E3A8A] transition-colors">
                   {currentBrand.name}
                 </span>
               )}
@@ -146,7 +147,7 @@ export const BrandPartnersSection: React.FC<BrandPartnersSectionProps> = ({ isAr
         </p>
       </div>
 
-      <div className="flex justify-center items-center gap-4 md:gap-8">
+      <div className="flex justify-center items-center gap-6 md:gap-12">
         {columns.map((cols, index) => (
           <BrandColumn
             key={index}
