@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { BrandPartnersSection } from './components/BrandPartnersSection';
 import { Collection } from './components/Collection';
 import { AboutTeaser } from './components/AboutTeaser';
+import { CTAWithVerticalMarquee } from './components/ui/cta-with-text-marquee';
 import { BuyPage } from './components/BuyPage';
 import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
@@ -183,6 +184,11 @@ export const App: React.FC = () => {
             <BrandPartnersSection isArabic={isArabic} brands={brands} />
             <Collection onOpenInquiry={handleOpenInquiry} isArabic={isArabic} properties={properties} cars={cars} />
             <AboutTeaser onOpenInquiry={handleOpenInquiry} isArabic={isArabic} />
+            <CTAWithVerticalMarquee
+              isArabic={isArabic}
+              onOpenInquiry={handleOpenInquiry}
+              onNavigateBuy={() => handleNavigate('buy')}
+            />
           </>
         ) : (
           <BuyPage
