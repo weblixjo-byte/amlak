@@ -2,7 +2,8 @@
 
 import React, { ReactNode, useEffect, useRef } from "react";
 import { cn } from "../../lib/utils";
-import { InteractiveHoverButton } from "./interactive-hover-button";
+import { AnimatedDotButton } from "./animated-dot-button";
+import { BrushUnderline } from "./brush-underline";
 
 interface VerticalMarqueeProps {
   children: ReactNode;
@@ -148,16 +149,18 @@ export function CTAWithVerticalMarquee({
               {isArabic ? (
                 <>
                   اختر عقارك أو سيارتك القادمة واطلب{' '}
-                  <span className="relative inline-block pb-1 text-[#1E3A8A] font-bold after:absolute after:-bottom-1.5 after:right-0 after:w-full after:h-[6px] md:after:h-[8px] after:bg-[#0D5C3A] after:rounded-full">
+                  <span className="relative inline-block pb-2 text-[#1E3A8A] font-bold">
                     معاينة فورية
+                    <BrushUnderline color="#0D5C3A" />
                   </span>
                   .
                 </>
               ) : (
                 <>
                   Find your next asset and request an{' '}
-                  <span className="relative inline-block pb-1 text-[#1E3A8A] font-bold after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-[6px] md:after:h-[8px] after:bg-[#0D5C3A] after:rounded-full">
+                  <span className="relative inline-block pb-2 text-[#1E3A8A] font-bold">
                     instant viewing
+                    <BrushUnderline color="#0D5C3A" />
                   </span>
                   .
                 </>
@@ -172,21 +175,19 @@ export function CTAWithVerticalMarquee({
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-4">
-              <InteractiveHoverButton
+              <AnimatedDotButton
+                variant="blue"
                 onClick={() => onOpenInquiry && onOpenInquiry("استفسار ومعاينة مباشرة")}
                 text={isArabic ? "تواصل معنا الآن" : "Contact Us Now"}
                 isArabic={isArabic}
-                variant="primary"
-                className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-8 py-4 text-base"
               />
 
               {onNavigateBuy && (
-                <InteractiveHoverButton
+                <AnimatedDotButton
+                  variant="black"
                   onClick={onNavigateBuy}
                   text={isArabic ? "قسم الشراء المباشر" : "Explore Buy Portal"}
                   isArabic={isArabic}
-                  variant="dark"
-                  className="bg-neutral-900 text-white border-neutral-900 px-8 py-4 text-base"
                 />
               )}
             </div>

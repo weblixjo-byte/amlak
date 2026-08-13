@@ -2,7 +2,8 @@
 import React, { useRef } from "react";
 import { TimelineContent } from "../ui/timeline-animation";
 import { VerticalCutReveal } from "../ui/vertical-cut-reveal";
-import { InteractiveHoverButton } from "../ui/interactive-hover-button";
+import { AnimatedDotButton } from "../ui/animated-dot-button";
+import { BrushUnderline } from "../ui/brush-underline";
 
 interface AboutSectionProps {
   onOpenInquiry?: (itemTitle?: string) => void;
@@ -176,11 +177,11 @@ export function AboutSection({ onOpenInquiry, isArabic = true }: AboutSectionPro
           timelineRef={heroRef}
           className="flex justify-center"
         >
-          <InteractiveHoverButton
+          <AnimatedDotButton
+            variant="blue"
             onClick={() => onOpenInquiry && onOpenInquiry('طلب حجز معاينة خاصة')}
             text={isArabic ? "حجز معاينة الآن" : "Explore Our Services"}
             isArabic={isArabic}
-            className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-8 py-3.5 text-sm"
           />
         </TimelineContent>
       </div>

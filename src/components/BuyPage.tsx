@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PropertyItem } from '../types';
-import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { AnimatedDotButton } from './ui/animated-dot-button';
 
 interface BuyPageProps {
   onOpenInquiry: (itemTitle?: string) => void;
@@ -187,11 +187,12 @@ export const BuyPage: React.FC<BuyPageProps> = ({
                       <span className="text-base font-bold text-[#1E3A8A] font-mono">{item.price}</span>
                     </div>
 
-                    <InteractiveHoverButton
+                    <AnimatedDotButton
+                      variant="blue"
                       onClick={() => onOpenInquiry(isArabic ? (item.titleAr || item.title) : (item.title || item.titleAr))}
                       text={isArabic ? 'طلب معاينة' : 'Inquire'}
                       isArabic={isArabic}
-                      className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-4 py-2 text-xs"
+                      className="px-5 py-2 text-xs"
                     />
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { BrushUnderline } from './ui/brush-underline';
+import { AnimatedDotButton } from './ui/animated-dot-button';
 
 interface HeroProps {
   onOpenInquiry: (itemTitle?: string) => void;
@@ -41,8 +42,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
                   عقارات وسيارات مميزة للبيع
                 </h1>
                 <div className="text-2xl md:text-4xl font-bold text-white tracking-tight">
-                  <span className="relative inline-block pb-2 after:absolute after:bottom-0 after:right-0 after:w-full after:h-[4px] after:bg-[#1E3A8A] after:rounded-full">
+                  <span className="relative inline-block pb-2">
                     أفضل الأسعار
+                    <BrushUnderline color="#0D5C3A" />
                   </span>
                   <span className="mr-3 text-neutral-200">والخيارات المناسبة للجميع</span>
                 </div>
@@ -53,8 +55,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
                   Properties &amp; Vehicles For Sale
                 </h1>
                 <div className="text-2xl md:text-4xl font-bold text-white tracking-tight">
-                  <span className="relative inline-block pb-2 after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] after:bg-[#1E3A8A] after:rounded-full">
+                  <span className="relative inline-block pb-2">
                     Best Prices
+                    <BrushUnderline color="#0D5C3A" />
                   </span>
                   <span className="ml-3 text-neutral-200">&amp; Premium Options</span>
                 </div>
@@ -69,24 +72,23 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
               : 'Amlak helps you discover available apartments, villas, and cars for sale at competitive prices across Amman.'}
           </p>
 
-          {/* Action Buttons */}
+          {/* Action Buttons using AnimatedDotButton */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <InteractiveHoverButton
+            <AnimatedDotButton
+              variant="blue"
               onClick={() => onOpenInquiry('طلب معاينة أو استفسار')}
               text={isArabic ? 'تواصل معنا للمعاينة' : 'Contact Us For Viewing'}
               isArabic={isArabic}
-              className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-8 py-4 text-base"
             />
 
-            <InteractiveHoverButton
-              variant="dark"
+            <AnimatedDotButton
+              variant="black"
               onClick={() => {
                 const el = document.getElementById('portfolio');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
               text={isArabic ? 'استعرض العروض' : 'Browse Listings'}
               isArabic={isArabic}
-              className="bg-[#18181B] hover:bg-[#09090B] text-white border-neutral-700 px-8 py-4 text-base shadow-lg"
             />
           </div>
 

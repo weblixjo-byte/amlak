@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { api } from '../lib/api';
+import { AnimatedDotButton } from './ui/animated-dot-button';
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -143,11 +144,12 @@ export const InquiryModal: React.FC<InquiryModalProps> = ({
               </div>
             </div>
 
-            <InteractiveHoverButton
+            <AnimatedDotButton
               type="submit"
+              variant="blue"
               text={isArabic ? 'إرسال الطلب' : 'Submit Request'}
               isArabic={isArabic}
-              className="w-full mt-1 py-3.5 bg-[#1E3A8A] text-white border-[#1E3A8A] text-sm"
+              className="w-full justify-center mt-1 text-sm py-3.5"
             />
           </form>
         )}
