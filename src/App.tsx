@@ -14,7 +14,7 @@ const SECRET_HASH = '#amlak-admin-secret-8877';
 const ADMIN_PASSWORD = 'amlak2026';
 
 // ── DEFAULT INITIAL SEED DATA ───────────────────────────────────────────────
-const defaultProperties: PropertyItem[] = [
+export const defaultProperties: PropertyItem[] = [
   {
     id: 'p1',
     title: 'Apartment with terrace in Jabal Amman',
@@ -81,7 +81,7 @@ const defaultProperties: PropertyItem[] = [
   },
 ];
 
-const defaultCars: PropertyItem[] = [
+export const defaultCars: PropertyItem[] = [
   {
     id: 'c1',
     title: 'Bugatti Tourbillon 2026',
@@ -116,7 +116,7 @@ const defaultCars: PropertyItem[] = [
   },
 ];
 
-const defaultBrands: Brand[] = [
+export const defaultBrands: Brand[] = [
   { id: 'b1', name: 'BMW' },
   { id: 'b2', name: 'Mercedes-Benz' },
   { id: 'b3', name: 'Porsche' },
@@ -132,7 +132,7 @@ export const App: React.FC = () => {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
-  // ── Shared State (localStorage-backed with default seed data) ──────────────
+  // ── Shared State ──────────────────────────────────────────────────────────
   const [properties, setPropertiesRaw] = useState<PropertyItem[]>(() => {
     try {
       const saved = localStorage.getItem('amlak_properties');
@@ -140,9 +140,7 @@ export const App: React.FC = () => {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
     return defaultProperties;
   });
 
@@ -153,9 +151,7 @@ export const App: React.FC = () => {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
     return defaultCars;
   });
 
@@ -166,13 +162,11 @@ export const App: React.FC = () => {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
     return defaultBrands;
   });
 
-  // State Wrappers that also persist to localStorage immediately
+  // Wrappers with localStorage save
   const setProperties: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setPropertiesRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
@@ -197,13 +191,19 @@ export const App: React.FC = () => {
     });
   };
 
+  const handleResetDefaults = () => {
+    setProperties(defaultProperties);
+    setCars(defaultCars);
+    setBrands(defaultBrands);
+    alert(isArabic ? 'تم إعادة تحمـيل البيانات النموذجية الافتراضية بنجاح!' : 'Default demo data restored!');
+  };
+
   // Security & Admin Authentication State
   const [showPasswordAuthModal, setShowPasswordAuthModal] = useState(false);
   const [inputPassword, setInputPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
-  // Secret Hash Listener for Unexpected URL Access
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === SECRET_HASH) {
@@ -270,6 +270,7 @@ export const App: React.FC = () => {
           setCars={setCars}
           brands={brands}
           setBrands={setBrands}
+          onResetDefaults={handleResetDefaults}
         />
       </div>
     );
@@ -278,7 +279,7 @@ export const App: React.FC = () => {
   return (
     <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 font-ibm ${isArabic ? 'rtl' : 'ltr'}`} dir={isArabic ? 'rtl' : 'ltr'}>
       
-      {/* Header (Only on public site pages) */}
+      {/* Header */}
       <Header
         onOpenInquiry={handleOpenInquiry}
         isArabic={isArabic}
@@ -304,7 +305,7 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer (Only on public site pages) */}
+      {/* Footer */}
       <Footer onOpenInquiry={handleOpenInquiry} isArabic={isArabic} onOpenSecretAdmin={handleOpenSecretAdmin} />
 
       <InquiryModal

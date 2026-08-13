@@ -11,6 +11,7 @@ interface AdminDashboardProps {
   setCars: React.Dispatch<React.SetStateAction<PropertyItem[]>>;
   brands: Brand[];
   setBrands: React.Dispatch<React.SetStateAction<Brand[]>>;
+  onResetDefaults?: () => void;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -41,6 +42,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   setCars,
   brands,
   setBrands,
+  onResetDefaults,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'cars' | 'brands' | 'inquiries'>('overview');
 
@@ -138,6 +140,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <span>{isArabic ? 'الرجوع للموقع الرئيسي' : 'Back to Website'}</span>
               </button>
               <span className="text-neutral-300">•</span>
+              {onResetDefaults && (
+                <>
+                  <button
+                    onClick={onResetDefaults}
+                    className="text-xs font-bold text-neutral-600 hover:text-[#1E3A8A] bg-neutral-100 hover:bg-neutral-200 px-3 py-1 rounded-lg transition-colors flex items-center gap-1"
+                    title={isArabic ? 'استعادة العقارات والسيارات والبراندات النموذجية' : 'Reset sample data'}
+                  >
+                    <span className="material-symbols-outlined text-[15px]">restart_alt</span>
+                    <span>{isArabic ? 'استعادة البيانات النموذجية' : 'Restore Demo Data'}</span>
+                  </button>
+                  <span className="text-neutral-300">•</span>
+                </>
+              )}
               <span className="text-neutral-500 text-xs font-bold uppercase tracking-wider">AMLAK PLATFORM</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 font-ibm">
