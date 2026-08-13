@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 interface AboutSectionProps {
   onOpenInquiry?: (itemTitle?: string) => void;
@@ -12,27 +11,15 @@ export function AboutSection({ onOpenInquiry, isArabic = true }: AboutSectionPro
       <div className="max-w-[1440px] mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          {/* Editorial Visual Composition (Left in LTR / Right in RTL) */}
+          {/* Clean Single Luxury Showcase Image (No small overlapping image) */}
           <div className="lg:col-span-6 relative">
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 aspect-[4/3] bg-neutral-100">
+            <div className="relative z-10 rounded-3xl overflow-hidden shadow-xl border border-neutral-200 aspect-[4/3] bg-neutral-100">
               <img
                 src="/images/estate_interior.jpg"
                 alt="أملاك - معروضات فاخرة"
                 className="w-full h-full object-cover"
               />
             </div>
-            
-            {/* Overlapping secondary luxury image */}
-            <div className="hidden sm:block absolute -bottom-8 -left-6 md:-left-8 z-20 w-3/5 aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-              <img
-                src="/images/hero_car.jpg"
-                alt="سيارات فاخرة مجهزة للمعاينة"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Subtle Brand Accent Box */}
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-[#1E3A8A]/5 rounded-3xl -z-0"></div>
           </div>
 
           {/* Editorial Content Column */}
@@ -43,19 +30,11 @@ export function AboutSection({ onOpenInquiry, isArabic = true }: AboutSectionPro
               {isArabic ? "عن منصة أمـلاك" : "ABOUT AMLAK PLATFORM"}
             </span>
 
-            {/* Human Editorial Headline */}
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-neutral-900 leading-tight font-ibm">
-              {isArabic ? (
-                <>
-                  معاينة مـيدانية وتداول مباشر <br />
-                  <span className="text-[#1E3A8A]">للعقارات والسيارات النخبوية في الأردن.</span>
-                </>
-              ) : (
-                <>
-                  Direct viewings &amp; premium trading <br />
-                  <span className="text-[#1E3A8A]">for luxury assets in Jordan.</span>
-                </>
-              )}
+            {/* Headline matching EXACT Hero typography (Solid Text, Same Font & Style) */}
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 leading-tight font-ibm">
+              {isArabic
+                ? "معاينة ميدانية وتداول مباشر للعقارات والسيارات النخبوية في الأردن."
+                : "Direct viewings & premium trading for luxury assets in Jordan."}
             </h2>
 
             {/* Direct Copywriting */}
