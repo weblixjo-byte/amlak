@@ -100,7 +100,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Direct Buy Page CTA */}
             <button
               onClick={() => onNavigate('buy')}
-              className="hidden md:flex items-center gap-2 bg-[#1E3A8A] hover:bg-[#16316e] text-white px-4 py-2 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:scale-105 border-0 outline-none ring-0"
+              className="hidden md:flex items-center gap-2 bg-[#0D5C3A] hover:bg-[#09452b] text-white px-4 py-2 rounded-full font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-md hover:scale-105 border-0 outline-none ring-0"
             >
               <span>{isArabic ? 'قسم الشراء' : 'Buy Section'}</span>
               <span className="material-symbols-outlined text-[16px]">shopping_bag</span>

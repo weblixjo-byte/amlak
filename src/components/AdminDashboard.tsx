@@ -43,8 +43,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onLogout,
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'properties' | 'cars' | 'brands' | 'inquiries'>('overview');
-
-  // Start 100% CLEAN & SPOTLESS for inquiries too
   const [inquiries, setInquiriesRaw] = useState<Inquiry[]>(() => api.getInquiries());
 
   const setInquiries = (items: Inquiry[]) => {
@@ -67,6 +65,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [showAddModal, setShowAddModal] = useState(false);
   const [addCategory, setAddCategory] = useState<'estate' | 'car'>('estate');
   const [form, setForm] = useState(emptyForm());
+  const [isFeaturedModal, setIsFeaturedModal] = useState(false);
 
   const setField = (key: keyof ReturnType<typeof emptyForm>, value: string) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -94,7 +93,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         areaOrEngine: form.areaOrEngine.trim() || undefined,
       },
       description: form.description.trim(),
-      featured: true,
+      featured: isFeaturedModal, // Control Homepage vs Buy Page Only
     };
 
     if (addCategory === 'estate') {
@@ -104,6 +103,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
 
     setForm(emptyForm());
+    setIsFeaturedModal(false);
     setShowAddModal(false);
   };
 
@@ -248,7 +248,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <button
-                onClick={() => { setAddCategory('estate'); setShowAddModal(true); }}
+                onClick={() => { setAddCategory('estate'); setIsFeaturedModal(false); setShowAddModal(true); }}
                 className="bg-white border border-neutral-200 p-6 rounded-2xl flex items-center gap-4 shadow-sm hover:shadow-md hover:border-[#1E3A8A] transition-all group text-right"
               >
                 <div className="w-12 h-12 rounded-xl bg-[#1E3A8A]/10 text-[#1E3A8A] flex items-center justify-center group-hover:bg-[#1E3A8A] group-hover:text-white transition-colors">
@@ -256,12 +256,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div>
                   <span className="font-bold text-neutral-900 block">{isArabic ? 'إضافة عقار جديد' : 'Add Property'}</span>
-                  <span className="text-xs text-neutral-500">{isArabic ? 'يظهر فوراً على الموقع' : 'Appears live'}</span>
+                  <span className="text-xs text-neutral-500">{isArabic ? 'تحديد إظهاره بالرئيسية أو الشراء' : 'Specify placement'}</span>
                 </div>
               </button>
 
               <button
-                onClick={() => { setAddCategory('car'); setShowAddModal(true); }}
+                onClick={() => { setAddCategory('car'); setIsFeaturedModal(false); setShowAddModal(true); }}
                 className="bg-white border border-neutral-200 p-6 rounded-2xl flex items-center gap-4 shadow-sm hover:shadow-md hover:border-[#1E3A8A] transition-all group text-right"
               >
                 <div className="w-12 h-12 rounded-xl bg-[#1E3A8A]/10 text-[#1E3A8A] flex items-center justify-center group-hover:bg-[#1E3A8A] group-hover:text-white transition-colors">
@@ -269,7 +269,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
                 <div>
                   <span className="font-bold text-neutral-900 block">{isArabic ? 'إضافة سيارة جديدة' : 'Add Vehicle'}</span>
-                  <span className="text-xs text-neutral-500">{isArabic ? 'تظهر فوراً على الموقع' : 'Appears live'}</span>
+                  <span className="text-xs text-neutral-500">{isArabic ? 'تحديد إظهارها بالرئيسية أو الشراء' : 'Specify placement'}</span>
                 </div>
               </button>
 
@@ -300,12 +300,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     : (isArabic ? 'قسم السيارات الفاخرة' : 'Luxury Vehicles Section')}
                 </h3>
                 <p className="text-xs text-neutral-500 mt-1">
-                  {isArabic ? 'أي عنصر تضيفه هنا سينشر ويظهر فوراً على الموقع الرئيسي' : 'Items added here publish live immediately'}
+                  {isArabic
+                    ? 'يمكنك تحديد حتى 10 عناصر مميزة للظهور بالصفحة الرئيسية، أو إظهارها فقط بصفحة الشراء'
+                    : 'Select featured items for Homepage (Max 10) or Buy Page only'}
                 </p>
               </div>
               <button
                 onClick={() => {
                   setAddCategory(activeTab === 'properties' ? 'estate' : 'car');
+                  setIsFeaturedModal(false);
                   setShowAddModal(true);
                 }}
                 className="bg-[#1E3A8A] hover:bg-[#16316e] text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition-all shadow-sm"
@@ -331,6 +334,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <button
                   onClick={() => {
                     setAddCategory(activeTab === 'properties' ? 'estate' : 'car');
+                    setIsFeaturedModal(false);
                     setShowAddModal(true);
                   }}
                   className="bg-[#1E3A8A] text-white px-6 py-3 rounded-xl font-bold text-xs inline-flex items-center gap-2 shadow-sm"
@@ -349,7 +353,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <th className="py-4 px-4">{isArabic ? 'العنوان' : 'Title'}</th>
                         <th className="py-4 px-4">{isArabic ? 'الموقع / المواصفات' : 'Location / Specs'}</th>
                         <th className="py-4 px-4">{isArabic ? 'السعر' : 'Price'}</th>
-                        <th className="py-4 px-4">{isArabic ? 'التفاصيل' : 'Specs'}</th>
+                        <th className="py-4 px-4">{isArabic ? 'مكان الظهور والترقية' : 'Placement (Featured)'}</th>
                         <th className="py-4 px-4">{isArabic ? 'الحالة' : 'Badge'}</th>
                         <th className="py-4 px-4 text-center">{isArabic ? 'حذف' : 'Delete'}</th>
                       </tr>
@@ -375,9 +379,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             {isArabic ? item.locationOrSpecsAr : item.locationOrSpecs}
                           </td>
                           <td className="py-3 px-4 font-mono font-bold text-[#1E3A8A]">{item.price}</td>
-                          <td className="py-3 px-4 text-neutral-500">
-                            {[item.specs?.bedsOrHp, item.specs?.bathsOrSpeed, item.specs?.areaOrEngine].filter(Boolean).join(' • ') || '—'}
+                          
+                          {/* Placement toggle button (Featured vs Buy Page Only) */}
+                          <td className="py-3 px-4">
+                            <button
+                              onClick={() => {
+                                if (activeTab === 'properties') {
+                                  setProperties((prev) => prev.map((p) => p.id === item.id ? { ...p, featured: !p.featured } : p));
+                                } else {
+                                  setCars((prev) => prev.map((c) => c.id === item.id ? { ...c, featured: !c.featured } : c));
+                                }
+                              }}
+                              className={`px-3 py-1.5 rounded-xl font-bold text-[11px] flex items-center gap-1.5 transition-all ${
+                                item.featured !== false
+                                  ? 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                                  : 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'
+                              }`}
+                              title={isArabic ? 'انقر للتبديل بين الرئيسية وقسم الشراء' : 'Toggle Homepage featured'}
+                            >
+                              <span className="material-symbols-outlined text-[15px]">
+                                {item.featured !== false ? 'star' : 'shopping_bag'}
+                              </span>
+                              <span>
+                                {item.featured !== false
+                                  ? (isArabic ? 'الرئيسية + الشراء' : 'Homepage + Buy')
+                                  : (isArabic ? 'صفحة الشراء فقط' : 'Buy Page Only')}
+                              </span>
+                            </button>
                           </td>
+
                           <td className="py-3 px-4">
                             <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-[11px]">
                               {isArabic ? item.badgeAr : item.badge}
@@ -581,6 +611,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
 
               <form onSubmit={handleCreateListing} className="space-y-4 font-ibm text-xs">
+                
+                {/* HOMEPAGE FEATURED PLACEMENT CHECKBOX */}
+                <label className="flex items-center gap-3 p-4 bg-amber-50/80 border border-amber-200 rounded-2xl cursor-pointer hover:bg-amber-100/80 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={isFeaturedModal}
+                    onChange={(e) => setIsFeaturedModal(e.target.checked)}
+                    className="w-5 h-5 accent-[#1E3A8A] rounded cursor-pointer"
+                  />
+                  <div>
+                    <span className="block font-bold text-neutral-900 text-xs">
+                      {isArabic ? '⭐ إظهار البطاقة في الصفحة الرئيسية (عنصر مميز)' : '⭐ Display on Homepage (Featured)'}
+                    </span>
+                    <span className="text-[11px] text-neutral-600 block">
+                      {isArabic
+                        ? 'إذا لم تفعل هذا الخيار، ستظهر البطاقة في صفحة الشراء المنفصلة فقط.'
+                        : 'If unchecked, item will appear ONLY in the separate Buy Portal.'}
+                    </span>
+                  </div>
+                </label>
+
                 {/* Category */}
                 <div>
                   <label className="block text-neutral-700 font-bold mb-2">{isArabic ? 'نوع الفئة' : 'Category'}</label>
@@ -659,7 +710,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <label className="block text-neutral-700 font-bold mb-2">{isArabic ? 'رابط الصورة' : 'Image URL'}</label>
                     <input type="text" value={form.imageUrl}
                       onChange={(e) => setField('imageUrl', e.target.value)}
-                      placeholder="https://... أو اتتركها فارغة"
+                      placeholder="https://... أو اتركها فارغة"
                       className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-neutral-900 focus:outline-none focus:border-[#1E3A8A]"
                     />
                   </div>

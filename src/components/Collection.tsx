@@ -22,12 +22,15 @@ const mapToExperience = (item: PropertyItem, isArabic: boolean): ExperienceItem 
 });
 
 export const Collection: React.FC<CollectionProps> = ({ onOpenInquiry, isArabic, properties, cars }) => {
+  // Only show items marked as Featured on Homepage (Up to 10 max)
   const estateItems = properties
-    .filter((p) => p.category === 'estate')
+    .filter((p) => (!p.category || p.category === 'estate') && p.featured === true)
+    .slice(0, 10)
     .map((p) => mapToExperience(p, isArabic));
 
   const carItems = cars
-    .filter((c) => c.category === 'car')
+    .filter((c) => (!c.category || c.category === 'car') && c.featured === true)
+    .slice(0, 10)
     .map((c) => mapToExperience(c, isArabic));
 
   // Don't render section if both are empty
