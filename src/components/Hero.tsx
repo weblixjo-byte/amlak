@@ -1,4 +1,5 @@
 import React from 'react';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 interface HeroProps {
   onOpenInquiry: (itemTitle?: string) => void;
@@ -70,23 +71,22 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <button
+            <InteractiveHoverButton
               onClick={() => onOpenInquiry('طلب معاينة أو استفسار')}
-              className="bg-[#1E3A8A] hover:bg-[#1E3A8A] text-white px-8 py-4 rounded-xl font-bold text-base transition-all shadow-2xl flex items-center gap-3 border-none hover:scale-105"
-            >
-              <span>{isArabic ? 'تواصل معنا للمعاينة' : 'Contact Us For Viewing'}</span>
-              <span className="material-symbols-outlined text-[22px]">
-                arrow_forward
-              </span>
-            </button>
+              text={isArabic ? 'تواصل معنا للمعاينة' : 'Contact Us For Viewing'}
+              isArabic={isArabic}
+              className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-8 py-4 text-base"
+            />
 
-            <a
-              href="#portfolio"
-              className="bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/30 hover:border-white px-8 py-4 rounded-xl font-bold text-base transition-all shadow-xl flex items-center gap-2"
-            >
-              <span>{isArabic ? 'استعرض العروض' : 'Browse Listings'}</span>
-              <span className="material-symbols-outlined text-[20px]">expand_more</span>
-            </a>
+            <InteractiveHoverButton
+              onClick={() => {
+                const el = document.getElementById('portfolio');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              text={isArabic ? 'استعرض العروض' : 'Browse Listings'}
+              isArabic={isArabic}
+              className="bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border-white/30 px-8 py-4 text-base"
+            />
           </div>
 
         </div>

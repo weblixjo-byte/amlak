@@ -2,7 +2,7 @@
 import React, { useRef } from "react";
 import { TimelineContent } from "../ui/timeline-animation";
 import { VerticalCutReveal } from "../ui/vertical-cut-reveal";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { InteractiveHoverButton } from "../ui/interactive-hover-button";
 
 interface AboutSectionProps {
   onOpenInquiry?: (itemTitle?: string) => void;
@@ -170,15 +170,18 @@ export function AboutSection({ onOpenInquiry, isArabic = true }: AboutSectionPro
 
         {/* CTA Button */}
         <TimelineContent
-          as="button"
+          as="div"
           animationNum={1}
           customVariants={revealVariants3}
           timelineRef={heroRef}
-          onClick={() => onOpenInquiry && onOpenInquiry('طلب حجز معاينة خاصة')}
-          className="bg-[#1E3A8A] hover:bg-[#16316e] shadow-xl shadow-[#1E3A8A]/20 flex w-fit mx-auto items-center gap-2 hover:gap-4 transition-all duration-300 ease-in-out text-white px-8 py-3.5 rounded-full cursor-pointer font-bold text-sm"
+          className="flex justify-center"
         >
-          <span>{isArabic ? "حجز معاينة الآن" : "Explore Our Services"}</span>
-          {isArabic ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
+          <InteractiveHoverButton
+            onClick={() => onOpenInquiry && onOpenInquiry('طلب حجز معاينة خاصة')}
+            text={isArabic ? "حجز معاينة الآن" : "Explore Our Services"}
+            isArabic={isArabic}
+            className="bg-[#1E3A8A] text-white border-[#1E3A8A] px-8 py-3.5 text-sm"
+          />
         </TimelineContent>
       </div>
 
