@@ -18,7 +18,7 @@ function VerticalMarquee({
   pauseOnHover = false,
   reverse = false,
   className,
-  speed = 25,
+  speed = 22,
   onItemsRef,
 }: VerticalMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -128,10 +128,10 @@ export function CTAWithVerticalMarquee({
   }, []);
 
   return (
-    <section className="w-full bg-[#0A0D14] text-white py-24 px-6 md:px-12 overflow-hidden font-ibm border-t border-neutral-800 relative">
+    <section className="w-full bg-[#FAFAFA] text-neutral-900 py-24 px-6 md:px-12 overflow-hidden font-ibm border-t border-neutral-200 relative">
       
-      {/* Background Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1E3A8A]/15 rounded-full blur-[140px] pointer-events-none"></div>
+      {/* Background Decorative Soft Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#1E3A8A]/5 rounded-full blur-[140px] pointer-events-none"></div>
 
       <div className="max-w-[1440px] mx-auto relative z-10 animate-fade-in-up">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
@@ -139,25 +139,31 @@ export function CTAWithVerticalMarquee({
           {/* Content Column */}
           <div className="space-y-8 max-w-xl text-right font-ibm">
             
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0D5C3A]/20 border border-[#0D5C3A]/40 text-[#10B981] text-xs font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0D5C3A]/10 border border-[#0D5C3A]/30 text-[#0D5C3A] text-xs font-bold uppercase tracking-widest">
               <span>{isArabic ? "تواصل مباشر وحجز معاينة" : "DIRECT VIEWING & INQUIRY"}</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-white font-ibm">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-neutral-900 font-ibm">
               {isArabic ? (
                 <>
                   اختر عقارك أو سيارتك القادمة واطلب{' '}
-                  <span className="text-[#10B981]">معاينة فورية</span>.
+                  <span className="relative inline-block pb-1 text-[#1E3A8A] after:absolute after:bottom-0 after:right-0 after:w-full after:h-[4px] after:bg-[#0D5C3A] after:rounded-full">
+                    معاينة فورية
+                  </span>
+                  .
                 </>
               ) : (
                 <>
                   Find your next asset and request an{' '}
-                  <span className="text-[#10B981]">instant viewing</span>.
+                  <span className="relative inline-block pb-1 text-[#1E3A8A] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] after:bg-[#0D5C3A] after:rounded-full">
+                    instant viewing
+                  </span>
+                  .
                 </>
               )}
             </h2>
 
-            <p className="text-base md:text-lg text-neutral-400 leading-relaxed font-normal">
+            <p className="text-base md:text-lg text-neutral-600 leading-relaxed font-normal">
               {isArabic
                 ? "فريق أملاك جاهز لمساعدتك في استكشاف أرقى العقارات والسيارات المعروضة للبيع، وترتيب معاينة ميدانية مباشرة في الموقع بدون وسطاء."
                 : "The Amlak team is ready to schedule your direct on-site viewings for premium properties and luxury cars across Amman."}
@@ -179,7 +185,7 @@ export function CTAWithVerticalMarquee({
                   text={isArabic ? "قسم الشراء المباشر" : "Explore Buy Portal"}
                   isArabic={isArabic}
                   variant="dark"
-                  className="bg-neutral-900 text-white border-neutral-700 px-8 py-4 text-base"
+                  className="bg-neutral-900 text-white border-neutral-900 px-8 py-4 text-base"
                 />
               )}
             </div>
@@ -193,18 +199,18 @@ export function CTAWithVerticalMarquee({
                 {marqueeItems.map((item, idx) => (
                   <div
                     key={idx}
-                    className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight py-6 text-center text-white font-ibm marquee-item transition-opacity duration-300"
+                    className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight py-6 text-center text-neutral-900 font-ibm marquee-item transition-opacity duration-300"
                   >
                     {item}
                   </div>
                 ))}
               </VerticalMarquee>
               
-              {/* Top vignette gradient overlay */}
-              <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#0A0D14] via-[#0A0D14]/70 to-transparent z-10"></div>
+              {/* Top vignette white gradient overlay */}
+              <div className="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-[#FAFAFA] via-[#FAFAFA]/80 to-transparent z-10"></div>
               
-              {/* Bottom vignette gradient overlay */}
-              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#0A0D14] via-[#0A0D14]/70 to-transparent z-10"></div>
+              {/* Bottom vignette white gradient overlay */}
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/80 to-transparent z-10"></div>
             </div>
           </div>
 
