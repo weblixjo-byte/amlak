@@ -5,8 +5,8 @@ import { BrandPartnersSection } from './components/BrandPartnersSection';
 import { Collection } from './components/Collection';
 import { AboutTeaser } from './components/AboutTeaser';
 import { AboutPage } from './components/AboutPage';
+import { ListingPortalPage } from './components/ListingPortalPage';
 import { CTAWithVerticalMarquee } from './components/ui/cta-with-text-marquee';
-import { BuyPage } from './components/BuyPage';
 import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
 import { InquiryModal } from './components/InquiryModal';
@@ -18,11 +18,11 @@ const ADMIN_PASSWORD = 'amlak2026';
 
 export const App: React.FC = () => {
   const [isArabic, setIsArabic] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'buy' | 'about' | 'dashboard'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'estates' | 'cars' | 'about' | 'dashboard'>('home');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
-  // ── Persistent Admin Authentication ─────────────────────────────────────
+  // Persistent Admin Authentication
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
     try {
       return localStorage.getItem('amlak_admin_authenticated') === 'true';
@@ -35,12 +35,11 @@ export const App: React.FC = () => {
   const [inputPassword, setInputPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  // ── Shared State (Starts 100% CLEAN & SPOTLESS) ──────────────────────────
+  // Shared State
   const [properties, setPropertiesRaw] = useState<PropertyItem[]>(() => api.getProperties());
   const [cars, setCarsRaw] = useState<PropertyItem[]>(() => api.getCars());
   const [brands, setBrandsRaw] = useState<Brand[]>(() => api.getBrands());
 
-  // Setters that persist to local storage + API sync
   const setProperties: React.Dispatch<React.SetStateAction<PropertyItem[]>> = (val) => {
     setPropertiesRaw((prev) => {
       const next = typeof val === 'function' ? val(prev) : val;
@@ -65,18 +64,12 @@ export const App: React.FC = () => {
     });
   };
 
-  // Sync across tabs/windows
+  // Sync state changes across tabs
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'amlak_properties') {
-        try { setPropertiesRaw(e.newValue ? JSON.parse(e.newValue) : []); } catch {}
-      }
-      if (e.key === 'amlak_cars') {
-        try { setCarsRaw(e.newValue ? JSON.parse(e.newValue) : []); } catch {}
-      }
-      if (e.key === 'amlak_brands') {
-        try { setBrandsRaw(e.newValue ? JSON.parse(e.newValue) : []); } catch {}
-      }
+      if (e.key === 'amlak_properties') setPropertiesRaw(api.getProperties());
+      if (e.key === 'amlak_cars') setCarsRaw(api.getCars());
+      if (e.key === 'amlak_brands') setBrandsRaw(api.getBrands());
       if (e.key === 'amlak_admin_authenticated') {
         setIsAdminAuthenticated(e.newValue === 'true');
       }
@@ -107,7 +100,7 @@ export const App: React.FC = () => {
     setInquiryModalOpen(true);
   };
 
-  const handleNavigate = (page: 'home' | 'buy' | 'about') => {
+  const handleNavigate = (page: 'home' | 'estates' | 'cars' | 'about') => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -142,7 +135,6 @@ export const App: React.FC = () => {
     setCurrentPage('home');
   };
 
-  // Fullscreen Dashboard
   if (currentPage === 'dashboard' && isAdminAuthenticated) {
     return (
       <div className={`min-h-screen bg-neutral-900 text-white font-ibm ${isArabic ? 'rtl' : 'ltr'}`} dir={isArabic ? 'rtl' : 'ltr'}>
@@ -187,25 +179,33 @@ export const App: React.FC = () => {
             <CTAWithVerticalMarquee
               isArabic={isArabic}
               onOpenInquiry={handleOpenInquiry}
-              onNavigateBuy={() => handleNavigate('buy')}
+              onNavigateBuy={() => handleNavigate('estates')}
             />
           </>
+        ) : currentPage === 'estates' ? (
+          <ListingPortalPage
+            type="estate"
+            items={properties}
+            onOpenInquiry={handleOpenInquiry}
+            isArabic={isArabic}
+            onNavigateHome={() => handleNavigate('home')}
+          />
+        ) : currentPage === 'cars' ? (
+          <ListingPortalPage
+            type="car"
+            items={cars}
+            onOpenInquiry={handleOpenInquiry}
+            isArabic={isArabic}
+            onNavigateHome={() => handleNavigate('home')}
+          />
         ) : currentPage === 'about' ? (
           <AboutPage
             onOpenInquiry={handleOpenInquiry}
             isArabic={isArabic}
             onNavigateHome={() => handleNavigate('home')}
-            onNavigateBuy={() => handleNavigate('buy')}
+            onNavigateBuy={() => handleNavigate('estates')}
           />
-        ) : (
-          <BuyPage
-            onOpenInquiry={handleOpenInquiry}
-            isArabic={isArabic}
-            onNavigateHome={() => handleNavigate('home')}
-            properties={properties}
-            cars={cars}
-          />
-        )}
+        ) : null}
       </main>
 
       {/* Footer */}
@@ -261,29 +261,25 @@ export const App: React.FC = () => {
                 )}
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-3">
+              <div className="flex items-center gap-3 pt-2">
+                <button
+                  type="submit"
+                  className="flex-1 bg-[#1E3A8A] hover:bg-[#152C6E] text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors shadow-md"
+                >
+                  {isArabic ? 'دخول اللوحة' : 'Enter Dashboard'}
+                </button>
                 <button
                   type="button"
                   onClick={() => {
                     setShowPasswordAuthModal(false);
                     window.location.hash = '';
                   }}
-                  className="w-full py-3 rounded-xl bg-neutral-100 text-neutral-700 font-bold hover:bg-neutral-200 text-xs"
+                  className="px-4 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold rounded-xl text-sm transition-colors"
                 >
                   {isArabic ? 'إلغاء' : 'Cancel'}
                 </button>
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-xl bg-[#1E3A8A] hover:bg-[#1E3A8A] text-white font-bold text-xs shadow-md"
-                >
-                  {isArabic ? 'دخول لوحة التحكم' : 'Authenticate'}
-                </button>
               </div>
             </form>
-
-            <div className="text-[11px] text-neutral-400 text-center font-mono">
-              SECRET URL ROUTE: {SECRET_HASH}
-            </div>
 
           </div>
         </div>
