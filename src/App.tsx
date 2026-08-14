@@ -3,8 +3,6 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { BrandPartnersSection } from './components/BrandPartnersSection';
 import { Collection } from './components/Collection';
-import { AboutTeaser } from './components/AboutTeaser';
-import { AboutPage } from './components/AboutPage';
 import { ListingPortalPage } from './components/ListingPortalPage';
 import { CTAWithVerticalMarquee } from './components/ui/cta-with-text-marquee';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -18,7 +16,7 @@ const ADMIN_PASSWORD = 'amlak2026';
 
 export const App: React.FC = () => {
   const [isArabic, setIsArabic] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'estates' | 'cars' | 'about' | 'dashboard'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'estates' | 'cars' | 'dashboard'>('home');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
@@ -100,7 +98,7 @@ export const App: React.FC = () => {
     setInquiryModalOpen(true);
   };
 
-  const handleNavigate = (page: 'home' | 'estates' | 'cars' | 'about') => {
+  const handleNavigate = (page: 'home' | 'estates' | 'cars') => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -175,7 +173,6 @@ export const App: React.FC = () => {
             <Hero onOpenInquiry={handleOpenInquiry} isArabic={isArabic} />
             <BrandPartnersSection isArabic={isArabic} brands={brands} />
             <Collection onOpenInquiry={handleOpenInquiry} isArabic={isArabic} properties={properties} cars={cars} />
-            <AboutTeaser onOpenInquiry={handleOpenInquiry} isArabic={isArabic} />
             <CTAWithVerticalMarquee
               isArabic={isArabic}
               onOpenInquiry={handleOpenInquiry}
@@ -197,13 +194,6 @@ export const App: React.FC = () => {
             onOpenInquiry={handleOpenInquiry}
             isArabic={isArabic}
             onNavigateHome={() => handleNavigate('home')}
-          />
-        ) : currentPage === 'about' ? (
-          <AboutPage
-            onOpenInquiry={handleOpenInquiry}
-            isArabic={isArabic}
-            onNavigateHome={() => handleNavigate('home')}
-            onNavigateBuy={() => handleNavigate('estates')}
           />
         ) : null}
       </main>

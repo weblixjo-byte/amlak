@@ -7,8 +7,8 @@ interface HeaderProps {
   onOpenInquiry: (itemTitle?: string) => void;
   isArabic: boolean;
   setIsArabic: (val: boolean) => void;
-  currentPage: 'home' | 'estates' | 'cars' | 'about' | 'dashboard';
-  onNavigate: (page: 'home' | 'estates' | 'cars' | 'about') => void;
+  currentPage: 'home' | 'estates' | 'cars' | 'dashboard';
+  onNavigate: (page: 'home' | 'estates' | 'cars') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,16 +29,14 @@ export const Header: React.FC<HeaderProps> = ({
         { label: 'الرئيسية', href: '#home', page: 'home' as const },
         { label: 'قسم العقارات', href: '#estates', page: 'estates' as const },
         { label: 'قسم السيارات', href: '#cars', page: 'cars' as const },
-        { label: 'عن المنصة', href: '#about', page: 'about' as const },
       ]
     : [
         { label: 'Home', href: '#home', page: 'home' as const },
         { label: 'Properties', href: '#estates', page: 'estates' as const },
         { label: 'Luxury Cars', href: '#cars', page: 'cars' as const },
-        { label: 'About Us', href: '#about', page: 'about' as const },
       ];
 
-  const isWhiteBg = (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'about') ? true : isPastHero;
+  const isWhiteBg = (currentPage === 'estates' || currentPage === 'cars') ? true : isPastHero;
 
   return (
     <header className="fixed top-0 w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] font-ibm">
@@ -47,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div
         className={cn(
           "mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] outline-none ring-0 border-0 border-transparent",
-          (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'about')
+          (currentPage === 'estates' || currentPage === 'cars')
             ? "max-w-[1140px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
             : !isScrolled
             ? "w-full max-w-full mt-0 py-2 px-6 md:px-12 rounded-none bg-transparent text-white"
@@ -65,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
               alt="أمـلاك | AMLAK"
               className={cn(
                 "h-7 md:h-8 w-auto transition-all duration-500 object-contain",
-                (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'about')
+                (currentPage === 'estates' || currentPage === 'cars')
                   ? "filter-none"
                   : isPastHero
                   ? "filter-none"
