@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface NavHeaderProps {
-  items?: { label: string; href: string; page?: 'home' | 'estates' | 'cars' }[];
+  items?: { label: string; href: string; page?: 'home' | 'estates' | 'cars' | 'add-listing' }[];
   isArabic?: boolean;
   isWhiteBg?: boolean;
-  onNavigate?: (page: 'home' | 'estates' | 'cars') => void;
+  onNavigate?: (page: 'home' | 'estates' | 'cars' | 'add-listing') => void;
 }
 
 export function NavHeader({ items, isArabic = true, isWhiteBg = false, onNavigate }: NavHeaderProps) {
@@ -14,11 +14,13 @@ export function NavHeader({ items, isArabic = true, isWhiteBg = false, onNavigat
         { label: "الرئيسية", href: "#home", page: "home" as const },
         { label: "قسم العقارات", href: "#estates", page: "estates" as const },
         { label: "قسم السيارات", href: "#cars", page: "cars" as const },
+        { label: "أضف معروضك للبيع", href: "#add-listing", page: "add-listing" as const },
       ]
     : [
         { label: "Home", href: "#home", page: "home" as const },
         { label: "Properties", href: "#estates", page: "estates" as const },
         { label: "Luxury Cars", href: "#cars", page: "cars" as const },
+        { label: "Add Listing", href: "#add-listing", page: "add-listing" as const },
       ];
 
   const menuItems = items || defaultItems;
@@ -119,7 +121,7 @@ const Tab = ({
       ref={(el) => (tabRefs.current[index] = el)}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
-      className={`relative z-10 block cursor-pointer px-5 py-2 text-xs md:px-7 md:py-2.5 md:text-sm font-bold font-ibm tracking-normal transition-colors duration-200 ${
+      className={`relative z-10 block cursor-pointer px-4 py-2 text-xs md:px-6 md:py-2.5 md:text-xs font-bold font-ibm tracking-normal transition-colors duration-200 ${
         isHighlighted
           ? "text-white"
           : isWhiteBg
@@ -155,7 +157,7 @@ const Cursor = ({
     <motion.li
       animate={position}
       transition={{ type: "spring", stiffness: 350, damping: 32 }}
-      className="absolute z-0 h-8 rounded-full bg-[#1E3A8A] md:h-10 shadow-sm"
+      className="absolute z-0 h-8 rounded-full bg-[#1E3A8A] md:h-9 shadow-sm"
     />
   );
 };

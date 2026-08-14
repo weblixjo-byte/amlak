@@ -7,8 +7,8 @@ interface HeaderProps {
   onOpenInquiry: (itemTitle?: string) => void;
   isArabic: boolean;
   setIsArabic: (val: boolean) => void;
-  currentPage: 'home' | 'estates' | 'cars' | 'dashboard';
-  onNavigate: (page: 'home' | 'estates' | 'cars') => void;
+  currentPage: 'home' | 'estates' | 'cars' | 'add-listing' | 'dashboard';
+  onNavigate: (page: 'home' | 'estates' | 'cars' | 'add-listing') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,8 +18,6 @@ export const Header: React.FC<HeaderProps> = ({
   currentPage,
   onNavigate,
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   const isScrolled = useScroll(20);
   const isPastHero = useScroll(500);
 
@@ -29,14 +27,16 @@ export const Header: React.FC<HeaderProps> = ({
         { label: 'الرئيسية', href: '#home', page: 'home' as const },
         { label: 'قسم العقارات', href: '#estates', page: 'estates' as const },
         { label: 'قسم السيارات', href: '#cars', page: 'cars' as const },
+        { label: 'أضف معروضك للبيع', href: '#add-listing', page: 'add-listing' as const },
       ]
     : [
         { label: 'Home', href: '#home', page: 'home' as const },
         { label: 'Properties', href: '#estates', page: 'estates' as const },
         { label: 'Luxury Cars', href: '#cars', page: 'cars' as const },
+        { label: 'Add Listing', href: '#add-listing', page: 'add-listing' as const },
       ];
 
-  const isWhiteBg = (currentPage === 'estates' || currentPage === 'cars') ? true : isPastHero;
+  const isWhiteBg = (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'add-listing') ? true : isPastHero;
 
   return (
     <header className="fixed top-0 w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] font-ibm">
@@ -45,13 +45,13 @@ export const Header: React.FC<HeaderProps> = ({
       <div
         className={cn(
           "mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] outline-none ring-0 border-0 border-transparent",
-          (currentPage === 'estates' || currentPage === 'cars')
-            ? "max-w-[1140px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
+          (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'add-listing')
+            ? "max-w-[1180px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
             : !isScrolled
             ? "w-full max-w-full mt-0 py-2 px-6 md:px-12 rounded-none bg-transparent text-white"
             : isPastHero
-            ? "max-w-[1140px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
-            : "max-[#1140px] mt-3 py-1 px-5 rounded-full bg-black/70 backdrop-blur-2xl shadow-2xl text-white"
+            ? "max-w-[1180px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
+            : "max-[#1180px] mt-3 py-1 px-5 rounded-full bg-black/70 backdrop-blur-2xl shadow-2xl text-white"
         )}
       >
         <div className="h-12 flex items-center justify-between">
@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
               alt="أمـلاك | AMLAK"
               className={cn(
                 "h-7 md:h-8 w-auto transition-all duration-500 object-contain",
-                (currentPage === 'estates' || currentPage === 'cars')
+                (currentPage === 'estates' || currentPage === 'cars' || currentPage === 'add-listing')
                   ? "filter-none"
                   : isPastHero
                   ? "filter-none"
@@ -94,13 +94,13 @@ export const Header: React.FC<HeaderProps> = ({
               <span>{isArabic ? "EN" : "عربي"}</span>
             </button>
 
-            {/* Quick Action Button - Logo Emerald Color (#0D5C3A) */}
+            {/* Quick Action Button - Add Listing */}
             <button
-              onClick={() => onNavigate('estates')}
+              onClick={() => onNavigate('add-listing')}
               className="bg-[#0D5C3A] hover:bg-[#0A4A2E] text-white px-5 py-2 rounded-full text-xs font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5 border-0 outline-none ring-0 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[16px]">real_estate_agent</span>
-              <span>{isArabic ? 'قسم العقارات' : 'Properties'}</span>
+              <span className="material-symbols-outlined text-[16px]">add_circle</span>
+              <span>{isArabic ? 'أضف معروضك' : 'Add Listing'}</span>
             </button>
 
           </div>

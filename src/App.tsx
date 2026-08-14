@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { BrandPartnersSection } from './components/BrandPartnersSection';
 import { Collection } from './components/Collection';
 import { ListingPortalPage } from './components/ListingPortalPage';
+import { AddListingPage } from './components/AddListingPage';
 import { CTAWithVerticalMarquee } from './components/ui/cta-with-text-marquee';
 import { AdminDashboard } from './components/AdminDashboard';
 import { Footer } from './components/Footer';
@@ -16,7 +17,7 @@ const ADMIN_PASSWORD = 'amlak2026';
 
 export const App: React.FC = () => {
   const [isArabic, setIsArabic] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'estates' | 'cars' | 'dashboard'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'estates' | 'cars' | 'add-listing' | 'dashboard'>('home');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
@@ -98,7 +99,7 @@ export const App: React.FC = () => {
     setInquiryModalOpen(true);
   };
 
-  const handleNavigate = (page: 'home' | 'estates' | 'cars') => {
+  const handleNavigate = (page: 'home' | 'estates' | 'cars' | 'add-listing') => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -176,6 +177,7 @@ export const App: React.FC = () => {
             <CTAWithVerticalMarquee
               isArabic={isArabic}
               onOpenInquiry={handleOpenInquiry}
+              onNavigateAddListing={() => handleNavigate('add-listing')}
               onNavigateBuy={() => handleNavigate('estates')}
             />
           </>
@@ -194,6 +196,12 @@ export const App: React.FC = () => {
             onOpenInquiry={handleOpenInquiry}
             isArabic={isArabic}
             onNavigateHome={() => handleNavigate('home')}
+          />
+        ) : currentPage === 'add-listing' ? (
+          <AddListingPage
+            isArabic={isArabic}
+            onNavigateHome={() => handleNavigate('home')}
+            onNavigateEstates={() => handleNavigate('estates')}
           />
         ) : null}
       </main>
