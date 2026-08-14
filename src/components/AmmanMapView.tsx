@@ -71,7 +71,7 @@ export const AmmanMapView: React.FC<AmmanMapViewProps> = ({
         </div>
 
         {/* Draw Zone Search Badge */}
-        <div className="bg-[#EF4444] text-white px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 text-xs font-bold pointer-events-auto cursor-pointer hover:bg-red-600 transition-colors">
+        <div className="bg-[#0D5C3A] text-white px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 text-xs font-bold pointer-events-auto cursor-pointer hover:bg-[#0A4A2E] transition-colors">
           <span className="material-symbols-outlined text-[16px]">draw</span>
           <span>{isArabic ? 'رسم منطقة البحث' : 'Draw Area'}</span>
         </div>
@@ -113,9 +113,9 @@ export const AmmanMapView: React.FC<AmmanMapViewProps> = ({
                     <span>{item.price}</span>
                   </div>
 
-                  {/* Red Pin Marker Circle */}
+                  {/* Logo Emerald Pin Marker Circle */}
                   <div className={`w-4 h-4 rounded-full border-2 border-white shadow-md transition-all ${
-                    isSelected ? 'bg-red-600 scale-125 ring-4 ring-red-400/40' : 'bg-red-500 group-hover:bg-red-600'
+                    isSelected ? 'bg-[#0D5C3A] scale-125 ring-4 ring-[#0D5C3A]/40' : 'bg-[#0D5C3A] group-hover:bg-[#0A4A2E]'
                   }`}></div>
                   
                   {/* Subtle Pointer Shadow */}

@@ -43,7 +43,7 @@ export const ExperienceCard = ({
 
         {/* Favorite Heart Icon Button */}
         <button
-          className="absolute top-2.5 right-2.5 z-10 h-8 w-8 rounded-full bg-white/90 text-neutral-800 backdrop-blur-md hover:bg-white hover:text-red-500 flex items-center justify-center shadow-md transition-all duration-300"
+          className="absolute top-2.5 right-2.5 z-10 h-8 w-8 rounded-full bg-white/90 text-neutral-800 backdrop-blur-md hover:bg-white hover:text-[#0D5C3A] flex items-center justify-center shadow-md transition-all duration-300"
           onClick={(e) => {
             e.stopPropagation();
           }}
@@ -81,7 +81,7 @@ export const ExperienceCard = ({
       <div className="pt-3 border-t border-neutral-100 flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-[10px] text-neutral-400 font-bold uppercase">سعر مباشر</span>
-          <span className="text-base font-bold text-red-600 font-mono">
+          <span className="text-base font-bold text-[#0D5C3A] font-mono">
             {experience.currency ? `${experience.currency} ${experience.price}` : experience.price}
           </span>
         </div>

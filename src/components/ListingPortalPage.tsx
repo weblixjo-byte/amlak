@@ -103,7 +103,7 @@ export const ListingPortalPage: React.FC<ListingPortalPageProps> = ({
               />
             </div>
 
-            <button className="w-full sm:w-auto px-10 py-3.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold rounded-xl text-sm transition-all shadow-md shrink-0 flex items-center justify-center gap-2">
+            <button className="w-full sm:w-auto px-10 py-3.5 bg-[#0D5C3A] hover:bg-[#0A4A2E] text-white font-bold rounded-xl text-sm transition-all shadow-md shrink-0 flex items-center justify-center gap-2">
               <span>{isArabic ? "بحـث" : "Search"}</span>
             </button>
 

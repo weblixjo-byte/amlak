@@ -224,7 +224,7 @@ export const AddListingPage: React.FC<AddListingPageProps> = ({
 
                 <div className="space-y-1.5">
                   <label className="text-neutral-700 flex items-center gap-1">
-                    <Tag className="w-3.5 h-3.5 text-red-600" />
+                    <Tag className="w-3.5 h-3.5 text-[#0D5C3A]" />
                     <span>{isArabic ? "السعر المطلوب (دينار أردني)" : "Price (JOD)"}</span>
                   </label>
                   <input

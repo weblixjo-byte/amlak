@@ -197,7 +197,7 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
               {/* Interactive Location Map (الموقع - Matching Screenshot) */}
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-2 text-right">
-                  <span className="material-symbols-outlined text-[20px] text-red-500">location_on</span>
+                  <span className="material-symbols-outlined text-[20px] text-[#0D5C3A]">location_on</span>
                   <h3 className="text-base font-bold text-neutral-950">{isArabic ? "الموقع الجغرافي الخريطة" : "Location Map"}</h3>
                 </div>
                 <div className="w-full h-56 rounded-2xl overflow-hidden border border-neutral-300 relative shadow-inner">
@@ -209,7 +209,7 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
                     src="https://www.openstreetmap.org/export/embed.html?bbox=35.9000%2C31.9000%2C35.9500%2C31.9600&amp;layer=mapnik"
                   ></iframe>
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-6 h-6 rounded-full bg-red-600 border-4 border-white shadow-lg animate-bounce"></div>
+                    <div className="w-6 h-6 rounded-full bg-[#0D5C3A] border-4 border-white shadow-lg animate-bounce"></div>
                   </div>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
               <div className="bg-neutral-50 p-4 rounded-2xl border border-neutral-200 space-y-3 text-xs font-bold">
                 <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
                   <span className="text-neutral-500">{isArabic ? "السعر المباشر" : "Price"}</span>
-                  <span className="text-xl font-extrabold text-red-600 font-mono">{item.price}</span>
+                  <span className="text-xl font-extrabold text-[#0D5C3A] font-mono">{item.price}</span>
                 </div>
                 <div className="flex items-center justify-between pb-2 border-b border-neutral-200">
                   <span className="text-neutral-500">{isArabic ? "المنطقة" : "Region"}</span>
