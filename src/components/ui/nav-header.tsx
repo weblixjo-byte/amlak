@@ -2,10 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface NavHeaderProps {
-  items?: { label: string; href: string; page?: 'home' | 'buy' }[];
+  items?: { label: string; href: string; page?: 'home' | 'buy' | 'about' }[];
   isArabic?: boolean;
   isWhiteBg?: boolean;
-  onNavigate?: (page: 'home' | 'buy') => void;
+  onNavigate?: (page: 'home' | 'buy' | 'about') => void;
 }
 
 export function NavHeader({ items, isArabic = true, isWhiteBg = false, onNavigate }: NavHeaderProps) {
@@ -13,14 +13,12 @@ export function NavHeader({ items, isArabic = true, isWhiteBg = false, onNavigat
     ? [
         { label: "الرئيسية", href: "#home", page: "home" as const },
         { label: "قسم الشراء المباشر", href: "#buy", page: "buy" as const },
-        { label: "العقارات والسيارات", href: "#portfolio", page: "home" as const },
-        { label: "عن المنصة", href: "#why-us", page: "home" as const },
+        { label: "عن المنصة", href: "#about", page: "about" as const },
       ]
     : [
         { label: "Home", href: "#home", page: "home" as const },
         { label: "Buy Portal", href: "#buy", page: "buy" as const },
-        { label: "Listings", href: "#portfolio", page: "home" as const },
-        { label: "About Us", href: "#why-us", page: "home" as const },
+        { label: "About Us", href: "#about", page: "about" as const },
       ];
 
   const menuItems = items || defaultItems;

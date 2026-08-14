@@ -3,7 +3,7 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { BrandPartnersSection } from './components/BrandPartnersSection';
 import { Collection } from './components/Collection';
-import { AboutTeaser } from './components/AboutTeaser';
+import { AboutPage } from './components/AboutPage';
 import { CTAWithVerticalMarquee } from './components/ui/cta-with-text-marquee';
 import { BuyPage } from './components/BuyPage';
 import { AdminDashboard } from './components/AdminDashboard';
@@ -17,7 +17,7 @@ const ADMIN_PASSWORD = 'amlak2026';
 
 export const App: React.FC = () => {
   const [isArabic, setIsArabic] = useState(true);
-  const [currentPage, setCurrentPage] = useState<'home' | 'buy' | 'dashboard'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'buy' | 'about' | 'dashboard'>('home');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [selectedItemTitle, setSelectedItemTitle] = useState<string | undefined>(undefined);
 
@@ -106,7 +106,7 @@ export const App: React.FC = () => {
     setInquiryModalOpen(true);
   };
 
-  const handleNavigate = (page: 'home' | 'buy') => {
+  const handleNavigate = (page: 'home' | 'buy' | 'about') => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -124,12 +124,11 @@ export const App: React.FC = () => {
     e.preventDefault();
     if (inputPassword === ADMIN_PASSWORD) {
       setIsAdminAuthenticated(true);
-      try { localStorage.setItem('amlak_admin_authenticated', 'true'); } catch {}
+      localStorage.setItem('amlak_admin_authenticated', 'true');
       setShowPasswordAuthModal(false);
-      setPasswordError(false);
       setInputPassword('');
+      setPasswordError(false);
       setCurrentPage('dashboard');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setPasswordError(true);
     }
@@ -137,7 +136,7 @@ export const App: React.FC = () => {
 
   const handleLogoutAdmin = () => {
     setIsAdminAuthenticated(false);
-    try { localStorage.removeItem('amlak_admin_authenticated'); } catch {}
+    localStorage.removeItem('amlak_admin_authenticated');
     window.location.hash = '';
     setCurrentPage('home');
   };
@@ -145,7 +144,7 @@ export const App: React.FC = () => {
   // Fullscreen Dashboard
   if (currentPage === 'dashboard' && isAdminAuthenticated) {
     return (
-      <div className={`min-h-screen bg-[#F8FAFC] text-neutral-900 font-ibm ${isArabic ? 'rtl' : 'ltr'}`} dir={isArabic ? 'rtl' : 'ltr'}>
+      <div className={`min-h-screen bg-neutral-900 text-white font-ibm ${isArabic ? 'rtl' : 'ltr'}`} dir={isArabic ? 'rtl' : 'ltr'}>
         <AdminDashboard
           isArabic={isArabic}
           onNavigateHome={() => {
@@ -183,13 +182,19 @@ export const App: React.FC = () => {
             <Hero onOpenInquiry={handleOpenInquiry} isArabic={isArabic} />
             <BrandPartnersSection isArabic={isArabic} brands={brands} />
             <Collection onOpenInquiry={handleOpenInquiry} isArabic={isArabic} properties={properties} cars={cars} />
-            <AboutTeaser onOpenInquiry={handleOpenInquiry} isArabic={isArabic} />
             <CTAWithVerticalMarquee
               isArabic={isArabic}
               onOpenInquiry={handleOpenInquiry}
               onNavigateBuy={() => handleNavigate('buy')}
             />
           </>
+        ) : currentPage === 'about' ? (
+          <AboutPage
+            onOpenInquiry={handleOpenInquiry}
+            isArabic={isArabic}
+            onNavigateHome={() => handleNavigate('home')}
+            onNavigateBuy={() => handleNavigate('buy')}
+          />
         ) : (
           <BuyPage
             onOpenInquiry={handleOpenInquiry}

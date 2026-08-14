@@ -7,8 +7,8 @@ interface HeaderProps {
   onOpenInquiry: (itemTitle?: string) => void;
   isArabic: boolean;
   setIsArabic: (val: boolean) => void;
-  currentPage: 'home' | 'buy' | 'dashboard';
-  onNavigate: (page: 'home' | 'buy') => void;
+  currentPage: 'home' | 'buy' | 'about' | 'dashboard';
+  onNavigate: (page: 'home' | 'buy' | 'about') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,22 +23,20 @@ export const Header: React.FC<HeaderProps> = ({
   const isScrolled = useScroll(20);
   const isPastHero = useScroll(500);
 
-  // Clean Public Navigation Links (Dashboard link COMPLETELY REMOVED from public header)
+  // Clean Public Navigation Links pointing directly to dedicated pages
   const navItems = isArabic
     ? [
         { label: 'الرئيسية', href: '#home', page: 'home' as const },
         { label: 'قسم الشراء المباشر', href: '#buy', page: 'buy' as const },
-        { label: 'العقارات والسيارات', href: '#portfolio', page: 'home' as const },
-        { label: 'عن المنصة', href: '#why-us', page: 'home' as const },
+        { label: 'عن المنصة', href: '#about', page: 'about' as const },
       ]
     : [
         { label: 'Home', href: '#home', page: 'home' as const },
         { label: 'Buy Portal', href: '#buy', page: 'buy' as const },
-        { label: 'Listings', href: '#portfolio', page: 'home' as const },
-        { label: 'About Us', href: '#why-us', page: 'home' as const },
+        { label: 'About Us', href: '#about', page: 'about' as const },
       ];
 
-  const isWhiteBg = currentPage === 'buy' ? true : isPastHero;
+  const isWhiteBg = (currentPage === 'buy' || currentPage === 'about') ? true : isPastHero;
 
   return (
     <header className="fixed top-0 w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] font-ibm">
@@ -47,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div
         className={cn(
           "mx-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] outline-none ring-0 border-0 border-transparent",
-          currentPage === 'buy'
+          (currentPage === 'buy' || currentPage === 'about')
             ? "max-w-[1140px] mt-3 py-1 px-5 rounded-full bg-white/95 backdrop-blur-2xl shadow-lg text-neutral-900 border border-neutral-200/80"
             : !isScrolled
             ? "w-full max-w-full mt-0 py-2 px-6 md:px-12 rounded-none bg-transparent text-white"
@@ -65,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
               alt="أمـلاك | AMLAK"
               className={cn(
                 "h-7 md:h-8 w-auto transition-all duration-500 object-contain",
-                currentPage === 'buy'
+                (currentPage === 'buy' || currentPage === 'about')
                   ? "filter-none"
                   : isPastHero
                   ? "filter-none"

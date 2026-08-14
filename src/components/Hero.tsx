@@ -15,7 +15,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenInquiry, isArabic }) => {
       <div className="absolute inset-0 w-full h-full">
         <video
           src="/videos/hero_bg.mp4"
-          poster="/images/hero_mansion.jpg"
           preload="auto"
           autoPlay
           muted
