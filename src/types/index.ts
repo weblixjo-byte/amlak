@@ -8,12 +8,28 @@ export interface PropertyItem {
   locationOrSpecsAr: string;
   price: string;
   imageUrl: string;
+  galleryImages?: string[];
   badge: string;
   badgeAr: string;
   specs: {
     bedsOrHp?: string;
     bathsOrSpeed?: string;
     areaOrEngine?: string;
+    buildingAge?: string;
+    floorNumber?: string;
+    masterBeds?: string;
+    apartmentsInBuilding?: string;
+  };
+  details?: {
+    viewsCount?: number;
+    adNumber?: string;
+    ownerName?: string;
+    ownerPhone?: string;
+    region?: string;
+    landmarks?: string;
+    surroundingArea?: string;
+    address?: string;
+    amenities?: string[];
   };
   description: string;
   featured?: boolean;
@@ -24,8 +40,6 @@ export interface Brand {
   name: string;
   imageUrl?: string;
 }
-
-
 
 export interface NavItem {
   label: string;

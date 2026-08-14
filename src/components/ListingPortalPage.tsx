@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { PropertyItem } from '../types';
 import { AmmanMapView } from './AmmanMapView';
 import { ExperienceCard, ExperienceItem } from './ui/carousel-cards';
+import { PropertyDetailsModal } from './PropertyDetailsModal';
 
 interface ListingPortalPageProps {
   type: 'estate' | 'car';
@@ -43,6 +44,7 @@ export const ListingPortalPage: React.FC<ListingPortalPageProps> = ({
   const [selectedAgeOrYear, setSelectedAgeOrYear] = useState('');
   const [selectedFurnished, setSelectedFurnished] = useState('');
   const [selectedItemForMap, setSelectedItemForMap] = useState<PropertyItem | undefined>(undefined);
+  const [detailsModalItem, setDetailsModalItem] = useState<PropertyItem | null>(null);
 
   // Filter items logic
   const filteredItems = useMemo(() => {
@@ -317,7 +319,7 @@ export const ListingPortalPage: React.FC<ListingPortalPageProps> = ({
                   <ExperienceCard
                     key={item.id}
                     experience={mapToExperience(item, isArabic)}
-                    onClick={() => onOpenInquiry(isArabic ? item.titleAr : item.title)}
+                    onClick={() => setDetailsModalItem(item)}
                   />
                 ))}
               </div>
@@ -328,6 +330,15 @@ export const ListingPortalPage: React.FC<ListingPortalPageProps> = ({
         </div>
 
       </div>
+
+      {/* PROPERTY DETAILS FULL MODAL */}
+      <PropertyDetailsModal
+        item={detailsModalItem}
+        isOpen={!!detailsModalItem}
+        onClose={() => setDetailsModalItem(null)}
+        onOpenInquiry={onOpenInquiry}
+        isArabic={isArabic}
+      />
     </div>
   );
 };
