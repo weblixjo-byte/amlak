@@ -1,8 +1,6 @@
-import { ChevronLeft, ChevronRight, Heart, Star } from "lucide-react";
-import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatedDotButton } from "./animated-dot-button";
 
 export interface ExperienceItem {
   id: string;
@@ -20,7 +18,6 @@ export interface ExperienceItem {
 export interface ExperienceGridProps {
   title: string;
   items: ExperienceItem[];
-  viewAllHref?: string;
   onItemClick?: (title: string) => void;
 }
 
@@ -31,70 +28,72 @@ export const ExperienceCard = ({
   experience: ExperienceItem;
   onClick?: () => void;
 }) => (
-  <Card
+  <div
     onClick={onClick}
-    className="group relative flex h-[350px] w-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg cursor-pointer"
+    className="group relative flex h-[410px] min-w-[280px] sm:min-w-[300px] max-w-[310px] flex-col overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-sm transition-all duration-300 hover:shadow-xl cursor-pointer snap-start"
   >
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-xl bg-neutral-100">
-      <img
-        alt={experience.title}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        src={experience.image}
-      />
-      <Button
-        className="absolute top-2.5 right-2.5 z-10 rounded-full bg-white/80 text-neutral-700 backdrop-blur-sm hover:bg-white hover:text-[#1E3A8A]"
-        size="icon"
-        variant="ghost"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <Heart className="h-4 w-4 stroke-[2px]" />
-        <span className="sr-only">Favorite</span>
-      </Button>
-      {experience.badge && (
-        <Badge className="absolute top-2.5 left-2.5 rounded-md bg-[#1E3A8A] text-white px-2 py-0.5 font-bold text-xs shadow-sm">
-          {experience.badge}
-        </Badge>
-      )}
+    {/* Top Image Container with Heart & Golden 'مميز' Badge */}
+    <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100 p-2">
+      <div className="w-full h-full rounded-xl overflow-hidden relative">
+        <img
+          alt={experience.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          src={experience.image}
+        />
+
+        {/* Favorite Heart Icon Button */}
+        <button
+          className="absolute top-2.5 right-2.5 z-10 h-8 w-8 rounded-full bg-white/90 text-neutral-800 backdrop-blur-md hover:bg-white hover:text-red-500 flex items-center justify-center shadow-md transition-all duration-300"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <Heart className="h-4 w-4 stroke-[2.2px]" />
+        </button>
+
+        {/* Golden Ribbon 'مميز' Badge matching user screenshot */}
+        <div className="absolute bottom-0 left-0 z-10 bg-gradient-to-r from-[#F59E0B] to-[#F59E0B] text-white px-3.5 py-1 text-xs font-bold rounded-tr-xl shadow-md flex items-center gap-1 font-ibm">
+          <span>مميز</span>
+        </div>
+      </div>
     </div>
 
-    <div className="flex flex-1 flex-col justify-between p-3">
-      <CardContent className="p-0 space-y-1">
-        <h3 className="font-bold text-base tracking-tight text-neutral-900 line-clamp-1 group-hover:text-[#1E3A8A] transition-colors font-ibm">
+    {/* Card Body */}
+    <div className="flex flex-1 flex-col justify-between p-4 space-y-3 font-ibm">
+      <div className="space-y-2">
+        <h3 className="font-bold text-base tracking-tight text-neutral-900 line-clamp-2 leading-snug group-hover:text-[#1E3A8A] transition-colors min-h-[44px]">
           {experience.title}
         </h3>
-        <p className="text-neutral-500 text-xs tracking-tight font-medium flex items-center gap-1">
-          <span className="material-symbols-outlined text-[14px] text-[#1E3A8A]">location_on</span>
-          <span className="truncate">{experience.location}</span>
-        </p>
-        {experience.date && (
-          <p className="text-neutral-400 text-[11px] tracking-tight font-medium">
-            {experience.date}
-          </p>
-        )}
-      </CardContent>
 
-      <CardFooter className="mt-auto flex items-center justify-between p-0 pt-2 border-t border-neutral-100 font-ibm">
-        {experience.rating ? (
-          <span className="flex items-center gap-1 text-xs font-bold text-neutral-800">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-            {experience.rating}
-            {experience.reviewCount && (
-              <span className="text-neutral-400 font-normal">
-                ({experience.reviewCount})
-              </span>
-            )}
-          </span>
-        ) : (
-          <span className="text-[11px] text-neutral-500 font-bold">معاينة مباشرة</span>
+        <div className="flex items-center gap-1.5 text-neutral-500 text-xs font-semibold">
+          <span className="material-symbols-outlined text-[16px] text-[#0D5C3A]">location_on</span>
+          <span className="truncate">{experience.location}</span>
+        </div>
+
+        {experience.date && (
+          <div className="text-neutral-400 text-xs font-medium truncate pt-0.5">
+            {experience.date}
+          </div>
         )}
-        <span className="text-sm font-bold text-[#1E3A8A] font-mono">
-          {experience.currency ? `${experience.currency} ${experience.price}` : experience.price}
-        </span>
-      </CardFooter>
+      </div>
+
+      {/* Footer Price & Action Button */}
+      <div className="pt-3 border-t border-neutral-100 flex items-center justify-between">
+        <div className="flex flex-col">
+          <span className="text-[10px] text-neutral-400 font-bold uppercase">سعر مباشر</span>
+          <span className="text-base font-bold text-red-600 font-mono">
+            {experience.currency ? `${experience.currency} ${experience.price}` : experience.price}
+          </span>
+        </div>
+
+        <AnimatedDotButton
+          variant="blue"
+          text="طلب معاينة"
+          className="px-4 py-2 text-xs"
+        />
+      </div>
     </div>
-  </Card>
+  </div>
 );
 
 export const ExperienceSection = ({
@@ -102,12 +101,36 @@ export const ExperienceSection = ({
   items,
   onItemClick,
 }: ExperienceGridProps) => {
-  const scrollContainer = React.useRef<HTMLDivElement>(null);
+  const scrollContainer = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Automated 1-card-at-a-time sliding carousel timer (slides 1 card every 3 seconds)
+  useEffect(() => {
+    const container = scrollContainer.current;
+    if (!container || items.length <= 1) return;
+
+    const interval = setInterval(() => {
+      if (isHovered) return;
+
+      const cardWidth = 316; // Single card width + gap
+      const maxScroll = container.scrollWidth - container.clientWidth;
+
+      if (Math.abs(container.scrollLeft) + cardWidth >= maxScroll - 20) {
+        // Loop back smoothly to the beginning
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        // Slide 1 card forward
+        container.scrollBy({ left: -cardWidth, behavior: "smooth" });
+      }
+    }, 3200);
+
+    return () => clearInterval(interval);
+  }, [items.length, isHovered]);
 
   const handleScrollLeft = () => {
     if (scrollContainer.current) {
       scrollContainer.current.scrollBy({
-        left: -320,
+        left: 316,
         behavior: "smooth",
       });
     }
@@ -116,7 +139,7 @@ export const ExperienceSection = ({
   const handleScrollRight = () => {
     if (scrollContainer.current) {
       scrollContainer.current.scrollBy({
-        left: 320,
+        left: -316,
         behavior: "smooth",
       });
     }
@@ -133,13 +156,16 @@ export const ExperienceSection = ({
           </h2>
         </div>
 
-        {/* Carousel Container with Left & Right Side Arrows */}
-        <div className="relative group/carousel">
-          
+        {/* Carousel Container with Auto-slide & Side Control Arrows */}
+        <div
+          className="relative group/carousel"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           {/* Left Arrow Button */}
           <button
             onClick={handleScrollLeft}
-            className="absolute -left-3 md:-left-6 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/90 hover:bg-white text-neutral-900 border border-neutral-300 shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none"
+            className="absolute -left-3 md:-left-6 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-white/95 hover:bg-white text-neutral-900 border border-neutral-300 shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none"
             aria-label="Scroll left"
           >
             <ChevronLeft className="h-6 w-6" />
@@ -148,34 +174,25 @@ export const ExperienceSection = ({
           {/* Right Arrow Button */}
           <button
             onClick={handleScrollRight}
-            className="absolute -right-3 md:-right-6 top-1/2 -translate-y-1/2 z-20 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/90 hover:bg-white text-neutral-900 border border-neutral-300 shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none"
+            className="absolute -right-3 md:-right-6 top-1/2 -translate-y-1/2 z-20 h-11 w-11 rounded-full bg-white/95 hover:bg-white text-neutral-900 border border-neutral-300 shadow-xl backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none"
             aria-label="Scroll right"
           >
             <ChevronRight className="h-6 w-6" />
           </button>
 
-          {/* Scrolling Track */}
+          {/* Single-card Slide Scroll Track */}
           <div
-            className="scrollbar-hide -mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-4 no-scrollbar"
+            className="scrollbar-hide flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-4 no-scrollbar scroll-smooth"
             ref={scrollContainer}
-            style={{
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
           >
             {items.map((item) => (
-              <div
-                className="w-[280px] md:w-[320px] flex-none snap-start"
+              <ExperienceCard
                 key={item.id}
-              >
-                <ExperienceCard
-                  experience={item}
-                  onClick={() => onItemClick && onItemClick(item.title)}
-                />
-              </div>
+                experience={item}
+                onClick={() => onItemClick && onItemClick(item.title)}
+              />
             ))}
           </div>
-
         </div>
 
       </div>
@@ -183,6 +200,4 @@ export const ExperienceSection = ({
   );
 };
 
-export default function CarouselCards() {
-  return null;
-}
+export default ExperienceSection;
